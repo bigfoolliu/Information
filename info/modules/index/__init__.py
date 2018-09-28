@@ -10,8 +10,9 @@
 
 from flask import Blueprint
 
-index_blu = Blueprint('index', __name__)
+index_bp = Blueprint('index', __name__)
 
 # 导入视图
-from . import views
+from .views import *
+
 
