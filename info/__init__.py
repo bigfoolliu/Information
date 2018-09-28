@@ -5,7 +5,7 @@
 
 
 """
-__init__.py主要做app的创建,初始化工作
+info/__init__.py主要做app的创建,初始化工作
 """
 
 # 1. 基本配置
@@ -33,40 +33,11 @@ from logging.handlers import RotatingFileHandler
 # redis_store = redis.StrictRedis(host=Config.REDIS_HOST, port=Config.REDIS_PORT)
 
 db = SQLAlchemy()
-# redis存储对象
-redis_store = None
-
-
-# 10. 工厂方法
-def create_app(config_name):
-	"""根据传入不同的配置名字,初始化其对应配置的app实例"""
-	# 首先配置项目日志
-	setup_log(config_name)
-
-	app = Flask(__name__)
-
-	app.config.from_object(config[config_name])
-
-	# 重新配置数据库
-	db.init_app(app)
-	# 重新配置redis
-	redis_store = redis.StrictRedis(host=config[config_name].REDIS_HOST, port=config[config_name].REDIS_PORT)
-
-	"""
-	开启csrf保护
-	1. 自动开启csrf保护机制
-	2. 自动获取ajax请求头中的csrf_token
-	3. 自动校验这两个值,相等为正常请求,不等为非法请求
-	"""
-	CSRFProtect(app)
-	# 设置session保存位置
-	Session(app)
-
-	# 注册蓝图
-	from info.modules.index import index_blu
-	app.register_blueprint(index_blu)
-
-	return app
+"""
+redis存储对象
+# type: redis.StrictRedis 使的即使未具体定义,仍可以申明类型
+"""
+redis_store = None  # type: redis.StrictRedis
 
 
 # 11. 添加日志配置的相关方法
@@ -83,3 +54,38 @@ def setup_log(config_name):
 	# 为全局的日志工具对象(flask app使用的)添加日志记录器
 	logging.getLogger().addHandler(file_log_handler)
 
+
+# 10. 工厂方法
+def create_app(config_name):
+	"""根据传入不同的配置名字,初始化其对应配置的app实例"""
+	# 首先配置项目日志
+	setup_log(config_name)
+
+	app = Flask(__name__)
+
+	app.config.from_object(config[config_name])
+
+	# 重新配置数据库
+	db.init_app(app)
+	# 重新配置redis
+	global redis_store
+	redis_store = redis.StrictRedis(host=config[config_name].REDIS_HOST, port=config[config_name].REDIS_PORT)
+
+	"""
+	开启csrf保护
+	1. 自动开启csrf保护机制
+	2. 自动获取ajax请求头中的csrf_token
+	3. 自动校验这两个值,相等为正常请求,不等为非法请求
+	"""
+	csrf = CSRFProtect(app)
+	# 设置session保存位置
+	Session(app)
+
+	"""
+	注册蓝图
+	当需要蓝图的时候才导入,防止其他位置导入错误
+	"""
+	from info.modules.index import index_bp
+	app.register_blueprint(index_bp)
+
+	return app
