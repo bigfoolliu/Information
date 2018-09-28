@@ -37,16 +37,14 @@ from flask_migrate import Migrate, MigrateCommand
 from info import create_app, db
 # 11. 增加日志,在配置文件中增加日志等级等
 
+# 导入模型
+from info import modules
+
 
 app = create_app('development')  # 以开发模式配置来创建app
 manager = Manager(app)
-Migrate(app)
+Migrate(app, db)
 manager.add_command('db', MigrateCommand)
-
-
-# @app.route('/')
-# def index():
-# 	return 'Index Page'
 
 
 if __name__ == '__main__':
