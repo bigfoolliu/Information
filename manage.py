@@ -5,7 +5,7 @@
 
 
 """
-manage.py作为主程序的入口
+/manage.py作为主程序的入口
 	只做最基本的启动工作,app的创建移动至info的__init__.py中
 
 其中:
@@ -49,4 +49,3 @@ manager.add_command('db', MigrateCommand)
 
 if __name__ == '__main__':
 	manager.run()  # 在启动中配置参数runserver
-

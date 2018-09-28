@@ -5,7 +5,7 @@
 
 
 """
-views.py存放当前模块的所有视图函数
+/info/modules/index/views.py存放当前模块的所有视图函数
 """
 # 导入蓝图
 from . import index_bp
@@ -18,7 +18,7 @@ from flask import current_app
 @index_bp.route('/')
 def hello_world():
 	# 使用redis对象存储key-value数据(用作测试redis连接用)
-	redis_store.set('name', 'liu')
+	redis_store.set('name', 'liu')  # TODO: 需要在本地开启redis-server使用
 
 	# python内置logging模块测试用
 	logging.debug('debug msg')

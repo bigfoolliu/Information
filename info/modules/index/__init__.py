@@ -5,7 +5,7 @@
 
 
 """
-创建自己的蓝图
+/info/modules/index/__init__.py
 """
 
 from flask import Blueprint

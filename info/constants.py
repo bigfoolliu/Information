@@ -5,7 +5,7 @@
 
 
 """
-constants.py保存当前项目中要使用的一些常量
+/info/constants.py保存当前项目中要使用的一些常量
 """
 
 # 图片验证码Redis有效期， 单位：秒
