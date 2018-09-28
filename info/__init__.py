@@ -52,10 +52,19 @@ def create_app(config_name):
 	# 重新配置redis
 	redis_store = redis.StrictRedis(host=config[config_name].REDIS_HOST, port=config[config_name].REDIS_PORT)
 
-	# 开启csrf保护
+	"""
+	开启csrf保护
+	1. 自动开启csrf保护机制
+	2. 自动获取ajax请求头中的csrf_token
+	3. 自动校验这两个值,相等为正常请求,不等为非法请求
+	"""
 	CSRFProtect(app)
 	# 设置session保存位置
 	Session(app)
+
+	# 注册蓝图
+	from info.modules.index import index_blu
+	app.register_blueprint(index_blu)
 
 	return app
 

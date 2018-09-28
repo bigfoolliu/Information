@@ -44,9 +44,9 @@ Migrate(app)
 manager.add_command('db', MigrateCommand)
 
 
-@app.route('/')
-def index():
-	return 'Index Page'
+# @app.route('/')
+# def index():
+# 	return 'Index Page'
 
 
 if __name__ == '__main__':
