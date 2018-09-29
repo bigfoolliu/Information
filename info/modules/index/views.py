@@ -13,6 +13,8 @@ from . import index_bp
 import logging
 from info import redis_store
 from flask import current_app
+# 导入创建好的模型,即与模型进行关联
+from info.models import User, News, Comment, Category, CommentLike
 
 
 @index_bp.route('/')

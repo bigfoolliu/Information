@@ -13,12 +13,17 @@ import redis
 import os
 import logging
 
+# sqlalchemy_database_url = os.environ.get('SQLALCHEMY_DATABASE_URI')  # 从系统变量加载以保密
+
 
 class Config(object):
 	"""工程配置类, 之后配置太多时将其单独放到一个文件"""
 	DEBUG = True
 
-	SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')  # 从系统变量加载以保密
+	SQLALCHEMY_DATABASE_URI = 'mysql://tonyliu:liu941103@127.0.0.1:3306/flask_information'  # 从系统变量加载以保密
+	# global sqlalchemy_database_url
+	# SQLALCHEMY_DATABASE_URI = sqlalchemy_database_url
+	# print(SQLALCHEMY_DATABASE_URI, type(SQLALCHEMY_DATABASE_URI))
 	SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 	REDIS_HOST = '127.0.0.1'
