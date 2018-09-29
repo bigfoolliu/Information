@@ -16,20 +16,35 @@ from flask import current_app
 # 导入创建好的模型,即与模型进行关联
 from info.models import User, News, Comment, Category, CommentLike
 
+from flask import render_template
+
 
 @index_bp.route('/')
 def hello_world():
-	# 使用redis对象存储key-value数据(用作测试redis连接用)
-	redis_store.set('name', 'liu')  # TODO: 需要在本地开启redis-server使用
+	# # 使用redis对象存储key-value数据(用作测试redis连接用)
+	# redis_store.set('name', 'liu')  # TODO: 测试,如果使用需要在本地开启redis-server使用
+	#
+	# # python内置logging模块测试用
+	# logging.debug('debug msg')
+	# logging.info('info msg')
+	# logging.warning('warning msg')
+	# logging.error('error msg')
+	# logging.critical('critical msg')
+	#
+	# # flask中对logging模块封装的,直接用current_app调用
+	# current_app.logger.debug('flask debug msg')
 
-	# python内置logging模块测试用
-	logging.debug('debug msg')
-	logging.info('info msg')
-	logging.warning('warning msg')
-	logging.error('error msg')
-	logging.critical('critical msg')
+	"""
+	返回新闻首页
+	:return:
+	"""
+	return render_template('news/index.html')
 
-	# flask中对logging模块封装的,直接用current_app调用
-	current_app.logger.debug('flask debug msg')
 
-	return 'hello world.'
+@index_bp.route('/favicon.ico')
+def favicon():
+	"""
+	返回网页tab的图标
+	:return:
+	"""
+	return current_app.send_static_file('news/favicon.ico')  # TODO: 注意路径

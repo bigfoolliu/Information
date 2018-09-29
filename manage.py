@@ -45,5 +45,5 @@ manager.add_command('db', MigrateCommand)
 
 
 if __name__ == '__main__':
-	# 在启动中配置参数runserver
+	# 在启动中配置参数runserver,以及环境变量
 	manager.run()
