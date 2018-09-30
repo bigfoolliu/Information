@@ -189,6 +189,60 @@ function sendSMSCode() {
     }
 
     // TODO 发送短信验证码
+    //准备发送给后端的json数据对象,包括手机号,输入的图片验证码,uuid
+    var params = {
+        'mobile': mobile,
+        'image_code': imageCode,
+        'image_code_id': imageCodeId
+    }
+
+    //发送ajax请求
+    $.ajax({
+        url: '/passport/sms_code',
+        type: 'POST',
+        //将js对象转为json数据格式,注意使用该函数
+        data: JSON.stringify(params),
+        //告诉后端发送的数据类型是json格式
+        contentType: 'application/json',
+        //接收数据类型也是json格式
+        dataType: 'json',
+        success:function (resp) {
+            //发送短信成功的回调函数,参数resp为前端自定义
+            if (resp.errno == 0){
+                //发送短信成功,倒计时成功60秒
+                var num = 60;
+                //设置一个计时器
+                var t =setInterval(function () {
+                    if (num == 1){
+                        //如果计时器到最后,清除计时器对象
+                        clearInterval(t);
+                        //将点击获取验证码的按钮展示的文本恢复成原始文本
+                        $('.get_code').html('获取验证码');
+                        //点击按钮的onclick事件属性恢复
+                        $('.get_code').attr('onclick', 'sendSMSCode();');
+                    }else{
+                        num -= 1;
+                        //展示倒计时信息
+                        $('.get_code').html(num + '秒');
+                    }
+                }, 1000)
+            }else{
+                //发送短信验证码异常
+                //后端出现异常,将错误信息展示到前端页面
+                $('#register-sms-code-err').html(resp.errmsg);
+                $('#register-sms-code-err').show()
+                //将点击按钮的onclick恢复
+                $('.get_code').attr('onclick', 'sendSMSCode();');
+
+                if (resp.errno == '4004'){
+                    //验证码填写错误,需要重新填写
+                    //调用图片生成图片的方法,重新生成一张新的图片
+                    generateImageCode()
+                }
+            }
+        }
+    })
+
 }
 
 // 调用该函数模拟点击左侧按钮

@@ -11,6 +11,7 @@
 """
 from flask import Blueprint
 
+# 此处设置了url_prefix='/passport', 之后再蓝图中注册路由的时候就不需要写该路径了
 passport_bp = Blueprint('passport', __name__, url_prefix='/passport')
 
 # 导入视图函数

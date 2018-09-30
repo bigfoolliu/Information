@@ -69,7 +69,11 @@ def create_app(config_name):
 	db.init_app(app)
 	# 重新配置redis
 	global redis_store
-	redis_store = redis.StrictRedis(host=config[config_name].REDIS_HOST, port=config[config_name].REDIS_PORT)
+	redis_store = redis.StrictRedis(
+		host=config[config_name].REDIS_HOST,
+		port=config[config_name].REDIS_PORT,
+		decode_responses=True  # redis默认取出的数据为二进制,因此设置该参数以保证取出的为字符串
+	)
 
 	"""
 	开启csrf保护

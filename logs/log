@@ -51,3 +51,22 @@ INFO _internal.py:88 127.0.0.1 - - [29/Sep/2018 21:41:55] "GET / HTTP/1.1" 200 -
 INFO _internal.py:88 127.0.0.1 - - [29/Sep/2018 21:41:59] "GET /static/news/images/shutoff.png HTTP/1.1" 200 -
 INFO _internal.py:88 127.0.0.1 - - [29/Sep/2018 21:44:54] "GET / HTTP/1.1" 200 -
 INFO _internal.py:88 127.0.0.1 - - [29/Sep/2018 21:45:01] "GET / HTTP/1.1" 200 -
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 161-212-188
+INFO _internal.py:88  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET / HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/css/reset.css HTTP/1.1" 304 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/js/jquery-1.12.4.min.js HTTP/1.1" 304 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/css/main.css HTTP/1.1" 304 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/js/main.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/js/index.js HTTP/1.1" 304 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/images/logo.png HTTP/1.1" 304 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/images/person01.png HTTP/1.1" 304 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/images/news_pic.jpg HTTP/1.1" 304 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/images/person.png HTTP/1.1" 304 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/images/pic_code.png HTTP/1.1" 304 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/images/hit_icon.png HTTP/1.1" 304 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:45:57] "GET /static/news/images/clock.png HTTP/1.1" 304 -
+ERROR views.py:42 ²ÎÊý²»×ã.
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 14:46:12] "GET /passport/image_code HTTP/1.1" 404 -
