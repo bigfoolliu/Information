@@ -81,7 +81,8 @@ def create_app(config_name):
 	2. 自动获取ajax请求头中的csrf_token
 	3. 自动校验这两个值,相等为正常请求,不等为非法请求
 	"""
-	csrf = CSRFProtect(app)
+	# TODO: 暂时csrf的校验
+	# csrf = CSRFProtect(app)
 	# 设置session保存位置
 	Session(app)
 

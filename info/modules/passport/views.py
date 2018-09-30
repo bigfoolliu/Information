@@ -110,9 +110,9 @@ def send_sms_code():
 	print("param_dict:", type(param_dict), param_dict)  # TODO: 测试
 
 	# 获取该字典中的所有参数值,为方式报错,使用字典的get方法,从而可以设置默认值为空
-	mobile = param_dict.get('mobile', default='')
-	image_code = param_dict.get('image_code', default='')
-	image_code_id = param_dict.get('image_code_id', default='')
+	mobile = param_dict.get('mobile', '')
+	image_code = param_dict.get('image_code', '')
+	image_code_id = param_dict.get('image_code_id', '')
 
 	# 非空判断,所有单个参数都需要有值
 	if not all([mobile, image_code, image_code_id]):
@@ -124,7 +124,7 @@ def send_sms_code():
 
 	# 参数均填写完整
 	# 手机号正则校验
-	if not re.match('^1[34578][0-9]{9}$', mobile):
+	if not re.match('1[34578][0-9]{9}', mobile):
 		return jsonify(erron=RET.PARAMERR, errmsg='参数不足')
 
 	# 图片验证码校验
@@ -149,7 +149,7 @@ def send_sms_code():
 	1. 不区分大小写
 	2. redis对象创建(info/__init__.py)时需要添加参数: decode_responses=True
 	"""
-	if real_image_code != image_code:
+	if real_image_code.lower() != image_code.lower():
 		return jsonify(erron=RET.DATAERR, errmsg='图片验证码填写错误')
 
 	# 判断该用户之前是否已经注册过,注册过则不应该发送短信验证码
