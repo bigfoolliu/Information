@@ -87,5 +87,8 @@ def create_app(config_name):
 	"""
 	from info.modules.index import index_bp
 	app.register_blueprint(index_bp)
+	# 将注册蓝图注册到app
+	from info.modules.passport import passport_bp
+	app.register_blueprint(passport_bp)
 
 	return app

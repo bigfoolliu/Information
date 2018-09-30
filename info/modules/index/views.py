@@ -47,4 +47,4 @@ def favicon():
 	返回网页tab的图标
 	:return:
 	"""
-	return current_app.send_static_file('news/favicon.ico')  # TODO: 注意路径
+	return current_app.send_static_file('news/favicon.ico')  # TODO: 注意路径是相对于静态目录

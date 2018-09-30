@@ -6,6 +6,8 @@
 
 """
 /info/modules/index/__init__.py
+
+首页模块的蓝图初始化
 """
 
 from flask import Blueprint
