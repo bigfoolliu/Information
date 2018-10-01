@@ -295,3 +295,82 @@ def register():
 
 	# 返回注册成功
 	return jsonify(erron=RET.OK, errmsg='注册成功')
+
+
+"""
+登录后端接口
+
+URL：/passport/login
+请求方式：POST
+传入参数：JSON格式
+参数
+参数名		类型		是否必须	参数说明
+mobile		string	是		手机号
+password	string	是		密码
+
+返回类型：JSON
+参数名	类型		是否必须	参数说明
+errno	int		是		错误码
+errmsg	string	是		错误信息
+"""
+
+
+@passport_bp.route('/login', methods=['POST'])
+def login():
+	"""
+	1. 获取手机参数
+		手机号,密码(未加密的)
+	2. 参数校验
+		非空, 手机号格式
+	3. 逻辑处理
+		根据mobile查询用户是否存在
+		不存在则提示用户不存在
+		存在则判断密码的正确性
+		保存用户登录信息.更新最后一次的登录时间
+	4. 返回值
+		登录成功
+	:return:
+	"""
+	params_dict = request.json
+	mobile = params_dict.get('mobile', '')
+	password = params_dict.get('mobile', '')
+
+	if not all([mobile, password]):
+		return jsonify(erron=RET.PARAMERR, errmsg='参数不足')
+
+	if not re.match('1[34578][0-9]{9}', mobile):
+		current_app.logger.error('手机格式错误')
+		return jsonify(erron=RET.PARAMERR, errmsg='手机格式错误')
+
+	# 数据库查询手机用户是否存在
+	try:
+		user = User.query.filter(User.mobile == mobile).first()
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='mysql数据库查询异常')
+
+	if not user:
+		return jsonify(erron=RET.NODATA, errmsg='用户不存在')
+
+	# 校验密码
+	if not user.check_password(password):
+		return jsonify(erron=RET.DATAERR, errmsg='密码填写错误')
+
+	# 校验成功,用户登录,保存会话信息
+	session['user_id'] = user.id
+	session['nick_name'] = user.nick_name
+	session['mobile'] = user.mobile
+
+	# 更新最后一次登录时间
+	user.last_login = datetime.datetime.now()
+
+	# 将修改的数据提交到数据库
+	try:
+		db.session.commit()
+	except Exception as e:
+		current_app.logger.error(e)
+		db.session.rollback()
+		return jsonify(erron=RET.DBERR, errmsg='保存用户数据异常')
+
+	# 登录成功
+	return jsonify(erron=RET.OK, errmsg='登录成功')

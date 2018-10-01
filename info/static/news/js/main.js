@@ -102,6 +102,8 @@ $(function(){
 
     // TODO 登录表单提交
     $(".login_form_con").submit(function (e) {
+
+        // TODO: 注意此处将默认的提交表单请求进行了阻止
         e.preventDefault()
         var mobile = $(".login_form #mobile").val()
         var password = $(".login_form #password").val()
@@ -117,6 +119,30 @@ $(function(){
         }
 
         // 发起登录请求
+        var params = {
+            'mobile': mobile,
+            'password': password
+        }
+        $.ajax({
+            url: '/passport/login',
+            type: 'POST',
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            dataType: 'json',
+            headers: {
+                'X-CSRFToken': getCookie('csrf_token')
+            },
+            success: function (resp) {
+                if (resp.errno == '0'){
+                    location.reload()
+                }else{
+                    $('#login-password-err').html(resp.errmsg)
+                    $('#register-password-err').show()
+                }
+            }
+
+        })
+
     })
 
 

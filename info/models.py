@@ -6,6 +6,13 @@
 
 """
 info/models.py存放所有的模型
+
+User
+News
+Comment
+CommentLike
+Category
+
 """
 
 from datetime import datetime
@@ -91,9 +98,18 @@ class User(BaseModel, db.Model):
 		self.password_hash = generate_password_hash(value)
 
 	def check_password(self, password):
+		"""
+		检查密码的正确性
+		:param password:
+		:return: True 或者 False
+		"""
 		return check_password_hash(self.password_hash, password)
 
 	def to_dict(self):
+		"""
+		将python类的属性转换为字典格式
+		:return:
+		"""
 		resp_dict = {
 			'id': self.id,
 			'nick_name': self.nick_name,
