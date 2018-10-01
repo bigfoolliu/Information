@@ -7,7 +7,7 @@
 """
 /info/modules/passport/views.py
 
-处理注册的业务逻辑的视图函数
+处理注册,登录,退出的业务逻辑的视图函数
 """
 import random
 
@@ -15,13 +15,16 @@ from info import redis_store
 from info.lib.sms import CCP
 from info.utils.response_code import RET
 from . import passport_bp
-from flask import request, current_app, abort, make_response, jsonify
+from flask import request, current_app, abort, make_response, jsonify, session
 # 导入用于生成验证码图片的类()
 from info.utils.captcha.captcha import captcha
 # 导入常量
 from info import constants
 import re
 from info.models import User
+import datetime
+from info import db
+
 
 # 127.0.0.1:5000/passport/image_code?code_id=uuid编码
 @passport_bp.route('/image_code')
@@ -183,12 +186,112 @@ def send_sms_code():
 	if result != 0:
 		return jsonify(erron=RET.THIRDERR, errmsg='云通讯平台出现异常')
 
-	# 将生成的随机六位数存储进redis
+	# 将生成的随机六位数短信验证码存储进redis
+	# 注意此处存的key值为SMS_CODE_mobile
 	try:
-		redis_store.setex('SMS_CODE_%s' % sms_code, constants.SMS_CODE_REDIS_EXPIRES, sms_code)
+		redis_store.setex('SMS_CODE_%s' % mobile, constants.SMS_CODE_REDIS_EXPIRES, sms_code)
 	except Exception as e:
 		current_app.logger.error(e)
 		return jsonify(erron=RET.DBERR, errmsg='redis存储短信验证码异常')
 
 	# 返回值
 	return jsonify(erron=RET.OK, errmsg='短信验证码发送成功')
+
+
+"""
+注册接口的实现:
+
+URL：/passport/register
+
+请求方式：POST
+传入参数：JSON格式
+参数
+参数名		类型		是否必须	参数说明
+mobile		string	是		手机号
+smscode		string	是		短信验证码
+password	string	是		密码
+
+返回类型：JSON
+参数名	类型		是否必须	参数说明
+errno	int		是		错误码
+errmsg	string	是		错误信息
+"""
+
+
+# 127.0.0.1:5000/passport/register
+@passport_bp.route('/register', methods=['POST'])
+def register():
+	"""
+	注册后端接口:
+
+	1. 获取参数
+		手机号,短信验证码,密码
+	2. 参数校验
+		非空,手机号格式
+	3. 逻辑处理
+		redis以SMS_CODE_mobile作为key获取真实的sms_code并与用户输入的值进行校验
+		校验错误,提示短信验证码错误
+		校验正确,创建新用户
+	4. 返回值
+		注册成功
+	:return:
+	"""
+	param_dict = request.json
+	mobile = param_dict.get('mobile', '')
+	password = param_dict.get('password', '')
+	smscode = param_dict.get('smscode', '')
+
+	# 非空校验
+	if not all([mobile, password, smscode]):
+		return jsonify(erron=RET.PARAMERR, errmsg='参数不足')
+
+	# 手机号格式
+	if not re.match('1[34578][0-9]{9}', mobile):
+		current_app.logger.error('手机号格式错误')
+		return jsonify(erron=RET.PARAMERR, errmsg='手机号格式错误')
+
+	# redis数据库查询短信验证码
+	try:
+		real_smscode = redis_store.get('SMS_CODE_%s' % mobile)
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='redis数据库取真实短信验证码异常')
+
+	# 得到真实短信验证码,将其删除
+	if real_smscode:
+		redis_store.delete('SMS_CODE_%s' % mobile)
+	# 不存在说明短信验证码过期
+	else:
+		return jsonify(erron=RET.NODATA, errmsg='短信验证码过期')
+
+	# 短信验证码校验
+	if smscode != real_smscode:
+		return jsonify(erron=RET.DATAERR, errmsg='短信验证码填写错误')
+
+	# 参数校验完成,创建新用户
+	user = User()
+	user.mobile = mobile
+	user.nick_name = mobile
+	user.password = password
+	# 当前注册成功时间作为最近一次的登录时间
+	user.last_login = datetime.datetime.now()
+	user.password = password  # 此处赋值已经将密码进行了哈希化处理存储
+
+	# 将用户信息存储进数据库
+	try:
+		# 引入数据库对象
+		db.session.add(user)
+		db.session.commit()
+	except Exception as e:
+		current_app.logger.error(e)
+		# 出现异常需要进行数据库回滚
+		db.session.rollback()
+		return jsonify(erron=RET.DBERR, errmsg='mysql数据库存储用户异常')
+
+	# 注册成功,自动登录并在会话中记录用户的信息
+	session['user_id'] = user.id
+	session['nick_name'] = user.nick_name
+	session['mobile'] = user.mobile
+
+	# 返回注册成功
+	return jsonify(erron=RET.OK, errmsg='注册成功')

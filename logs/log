@@ -267,3 +267,53 @@ INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 15:35:22] "GET /passport/image_c
 INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 15:35:23] "GET /passport/image_code?code_id=8599a7fe-d985-4d48-b8fb-7e38ba0169ab HTTP/1.1" 200 -
 INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 15:35:24] "GET /passport/image_code?code_id=565aac8d-88fe-4613-818d-cce3042c0ca7 HTTP/1.1" 200 -
 INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 15:35:35] "POST /passport/sms_code HTTP/1.1" 200 -
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 161-212-188
+INFO _internal.py:88  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:22:48] "GET / HTTP/1.1" 200 -
+ERROR views.py:55 Error 10061 connecting to 127.0.0.1:6379. 由于目标计算机积极拒绝，无法连接。.
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:22:55] "GET /passport/image_code?code_id=c16f51ca-0765-4170-b668-4f322524892c HTTP/1.1" 500 -
+ERROR views.py:55 Error 10061 connecting to 127.0.0.1:6379. 由于目标计算机积极拒绝，无法连接。.
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:05] "GET /passport/image_code?code_id=d853e3df-47d5-4430-9386-771e07087f88 HTTP/1.1" 500 -
+ERROR views.py:55 Error 10061 connecting to 127.0.0.1:6379. 由于目标计算机积极拒绝，无法连接。.
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:07] "GET /passport/image_code?code_id=2db16173-15cf-4467-a143-83467d7dce93 HTTP/1.1" 500 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:39] "GET /passport/image_code?code_id=4b48ee6b-73d8-4889-86a1-3225a3d86569 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:40] "GET /passport/image_code?code_id=1edb1051-a2ce-4b47-9963-c974419b303d HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:41] "GET /passport/image_code?code_id=8c55143d-748d-4cb2-9ed6-882b181eaa2a HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:41] "GET /passport/image_code?code_id=9c9ed15a-8bb6-4948-b059-9ebfac93b582 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:41] "GET /passport/image_code?code_id=05406556-7273-4e93-88b5-b6241d14dd29 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:42] "GET /passport/image_code?code_id=b148710b-b67d-48c5-a751-085b57506c68 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:44] "GET /passport/image_code?code_id=f9206dea-ab65-4fce-aacd-25bdd4ddf5d3 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:50] "GET /passport/image_code?code_id=5de44bd2-6503-4c4a-963b-935f656998e4 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:51] "GET /passport/image_code?code_id=3d465293-42dd-4cb3-922e-6af7ec670959 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:52] "GET /passport/image_code?code_id=df52be92-ec4a-4fbe-b8e6-7c7f4c211ee0 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:23:53] "GET /passport/image_code?code_id=55a1d334-33be-4085-af2a-09ff8284e4bd HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 16:24:05] "POST /passport/sms_code HTTP/1.1" 200 -
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 267-197-146
+INFO _internal.py:88  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:48:39] "GET / HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:48:44] "GET /passport/image_code?code_id=6f365298-99e0-4457-acf6-2a22d5fcd528 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:48:52] "GET /passport/image_code?code_id=c129ec13-7492-408e-9f4b-ae8443e70bc8 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:48:53] "GET /passport/image_code?code_id=6923bc70-407d-4beb-9f3d-987234953d19 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:48:54] "GET /passport/image_code?code_id=0a6abe1c-15be-476e-b4aa-1a1ced89c314 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:49:00] "POST /passport/sms_code HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:49:03] "GET /passport/image_code?code_id=9fc48bd1-5049-436c-afa9-a478f04d0b6b HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:49:05] "GET /passport/image_code?code_id=8fbb8b82-4157-421d-afdd-2d2ef8d5aea5 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:49:06] "GET /passport/image_code?code_id=0c246833-780e-4c6e-96eb-ebf756585c3a HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:49:08] "GET /passport/image_code?code_id=c1a3001e-1eb0-4835-adef-fc27a103f9bc HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:49:10] "GET /passport/image_code?code_id=275d0112-a829-41f0-9e7b-f8071e5fb03e HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:49:12] "GET /passport/image_code?code_id=29373b7a-94c0-4c2e-9ee1-f653e6e9c23f HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:49:13] "GET /passport/image_code?code_id=91ef43c6-e93d-4f20-bd4a-59f30b92fb14 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:49:13] "GET /passport/image_code?code_id=471c2151-2cc4-4ac8-9542-ff0258ac6400 HTTP/1.1" 200 -
+ERROR views.py:160 (_mysql_exceptions.OperationalError) (2003, "Can't connect to MySQL server on '127.0.0.1' (10061)") (Background on this error at: http://sqlalche.me/e/e3q8)
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:49:25] "POST /passport/sms_code HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:50:00] "POST /passport/sms_code HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:50:04] "GET /passport/image_code?code_id=c95ade3b-5eee-42ac-ba48-a6155ea35a3a HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:50:05] "GET /passport/image_code?code_id=db8a176c-aeb1-45a8-9491-fd9b367d1f6f HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:50:06] "GET /passport/image_code?code_id=84af8b97-3fa2-4686-9884-3550e68ae313 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:50:07] "GET /passport/image_code?code_id=f90a9da5-1e3f-4cf9-a79f-b2c32c16f0eb HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:50:09] "GET /passport/image_code?code_id=a27d241b-eae7-4a01-80f5-6a1088ef6d79 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [30/Sep/2018 20:50:26] "POST /passport/sms_code HTTP/1.1" 200 -

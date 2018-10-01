@@ -150,7 +150,38 @@ $(function(){
             return;
         }
 
-        // 发起注册请求
+        // TODO: 发起注册请求
+        var params = {
+            'mobile': mobile,
+            'smscode': smscode,
+            'password': password,
+        }
+
+        $.ajax({
+            url: 'passport/register',
+            type: 'POST',
+            // 将js对象转换为json字符串
+            data: JSON.stringify(params),
+            // 告知后端发送的数据类型为json
+            contentType: 'application/json',
+            // 设置接受后端数据为json格式
+            dataType: 'json',
+            //
+            headers: {
+              'X-CSRFToken' : getCookie('csrf_token')
+            },
+            success: function (resp) {
+                // 回调函数,即当响应成功之后执行
+                if (resp.errno == '0'){
+                    // 注册成功,刷新页面从而将表单隐藏
+                    window.location.reload()
+                }else{
+                    // 展示错误信息
+                    $('#register-password-err').html(resp.errmsg)
+                    $('#register-password-err').show()
+                }
+            }
+        })
 
     })
 })

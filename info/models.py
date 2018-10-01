@@ -81,11 +81,12 @@ class User(BaseModel, db.Model):
 		lazy='dynamic'
 	)
 
-	@property
+	@property  # 将password方法转化为属性可以通过User.password调用
 	def password(self):
+		# 显然密码是不能直接被访问的,所以报错
 		raise AttributeError('当前属性不可读')
 
-	@password.setter
+	@password.setter  # password的set方法,即可以直接通过User.password = password定义
 	def password(self, value):
 		self.password_hash = generate_password_hash(value)
 

@@ -1,5 +1,9 @@
 # -*- coding:utf-8 -*-
 
+# TODO: 自己设置的基于python3的特性#, 全局取消证书验证
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
 from info.lib.CCPRestSDK import REST
 
 # 说明：主账号，登陆云通讯网站后，可在"控制台-应用"中看到开发者主账号ACCOUNT SID
@@ -12,7 +16,7 @@ _accountToken = '669505a0c9784e8a925986aab3f0e35b'
 _appId = '8aaf070866235bc501662599f38e0464'
 
 # 说明：请求地址，生产环境配置成app.cloopen.com
-_serverIP = 'app.cloopen.com'
+_serverIP = 'sandboxapp.cloopen.com'
 
 # 说明：请求端口 ，生产环境为8883
 _serverPort = "8883"
@@ -68,7 +72,6 @@ class CCP(object):
 			return 0
 		else:
 			# 返回-1 表示发送失败
-			print('发送失败')
 			return -1
 
 
