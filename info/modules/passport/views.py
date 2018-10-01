@@ -374,3 +374,13 @@ def login():
 
 	# 登录成功
 	return jsonify(erron=RET.OK, errmsg='登录成功')
+
+
+@passport_bp.route('/login_out', methods=['POST'])
+def login_out():
+	"""退出登录后台接口"""
+	# 直接将用户的会话信息删除
+	session.pop('user_id')
+	session.pop('mobile')
+	session.pop('mobile')
+	return jsonify(erron=RET.OK, errmsg='退出登录成功')

@@ -345,3 +345,23 @@ INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 16:28:00] "GET /passport/image_c
 INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 16:28:23] "POST /passport/login HTTP/1.1" 200 -
 INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 16:28:24] "POST /passport/login HTTP/1.1" 200 -
 INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 16:28:24] "POST /passport/login HTTP/1.1" 200 -
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 267-197-146
+INFO _internal.py:88  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:20:46] "GET / HTTP/1.1" 500 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:20:46] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:20:46] "GET /?__debugger__=yes&cmd=resource&f=jquery.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:20:46] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:20:46] "GET /?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:20:46] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:20:46] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:22:44] "GET / HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:22:44] "GET /favicon.ico HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:22:48] "GET /passport/image_code?code_id=9f648a34-ce98-4f5d-b311-b8acc2fef94c HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:23:03] "GET /passport/image_code?code_id=fee752bd-566a-4abc-83ea-aa11febe89af HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:23:05] "GET /passport/image_code?code_id=1218c4c4-9d7a-4a81-94c7-7fa722004634 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:23:22] "POST /passport/sms_code HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:23:53] "POST /passport/register HTTP/1.1" 500 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:24:28] "GET / HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [01/Oct/2018 21:24:28] "GET /favicon.ico HTTP/1.1" 200 -

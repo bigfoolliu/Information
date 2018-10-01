@@ -108,6 +108,7 @@ class User(BaseModel, db.Model):
 	def to_dict(self):
 		"""
 		将python类的属性转换为字典格式
+		便于之后的数据读取,以及可以将属性隐藏起来,有一定的保密作用
 		:return:
 		"""
 		resp_dict = {
