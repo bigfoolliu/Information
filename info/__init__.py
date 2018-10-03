@@ -82,7 +82,6 @@ def create_app(config_name):
 	2. 自动获取ajax请求头中的csrf_token
 	3. 自动校验这两个值,相等为正常请求,不等为非法请求
 	"""
-	# TODO: 暂时csrf的校验
 	csrf = CSRFProtect(app)
 
 	# 使用钩子函数将csrf_token带回给浏览器
@@ -95,7 +94,7 @@ def create_app(config_name):
 		# 返回响应对象
 		return response
 
-	# 添加自定义的过滤器
+	# 添加自定义的过滤器(参数1位自定义的过滤器函数名,函数2为之后在jinjia模板中使用的过滤器名称)
 	app.add_template_filter(do_index_class, 'do_index_class')
 
 	# 设置session保存位置

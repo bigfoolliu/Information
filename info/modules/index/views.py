@@ -40,7 +40,7 @@ def index():
 
 	# -------------------------获取新闻点击排行数据--------------------------
 	"""
-	将新闻在数据库中按照clicks的数字递减,然后获取前一定的条数显示
+	将新闻在数据库中按照clicks的数字递减,然后获取前一定的条数(此处为6)显示
 	"""
 	try:
 		news_rank_list = News.query.order_by(News.clicks.desc()).limit(constants.CLICK_RANK_MAX_NEWS).all()

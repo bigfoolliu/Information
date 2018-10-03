@@ -101,7 +101,7 @@
 
             <!--将点击量最高的几条新闻倒序排列-->
             <ul class="rank_list">
-                {% for news_dict in data.news_rank_list %}
+                {% for news_dict in data.news_info %}
                     <li><span class="{{ loop.index0 | do_index_class }}">{{ loop.index }}</span><a href="#">{{ news_dict.title }}</a></li>
                 {% endfor %}
 

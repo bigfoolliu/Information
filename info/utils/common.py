@@ -11,11 +11,11 @@
 
 def do_index_class(index):
 	"""根据index的下标返回对应的class值"""
-	if index == 1:
+	if index == 0:
 		return 'first'
-	elif index == 2:
+	elif index == 1:
 		return 'second'
-	elif index == 3:
+	elif index == 2:
 		return 'third'
 	else:
 		return ''
