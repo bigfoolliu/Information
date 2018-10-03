@@ -134,6 +134,7 @@ $(function(){
             },
             success: function (resp) {
                 if (resp.errno == '0'){
+                    // 返回成功,刷新页面
                     location.reload()
                 }else{
                     $('#login-password-err').html(resp.errmsg)
@@ -183,6 +184,7 @@ $(function(){
             'password': password,
         }
 
+        // 发起注册请求
         $.ajax({
             url: 'passport/register',
             type: 'POST',
@@ -335,4 +337,28 @@ function generateUUID() {
         return (c=='x' ? r : (r&0x3|0x8)).toString(16);
     });
     return uuid;
+}
+
+// 退出登录
+function login_out() {
+    // 发起注册请求
+    $.ajax({
+        url: '/passport/login_out',
+        type: 'POST',
+        // data:,
+        contentType: 'application/json',
+        // dataType: '',
+        headers: {
+            'X-CSRFToken': getCookie('csrf_token')
+        },
+        success: function (resp) {
+            if (resp.errno == '0'){
+                // 返回成功,刷新页面
+                location.reload()
+            }else{
+                //
+            }
+        }
+
+    })
 }

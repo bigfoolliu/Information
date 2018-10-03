@@ -30,7 +30,8 @@ class Config(object):
 	REDIS_PORT = 6379
 	REDIS_NUM = 0  # 使用的redis数据库
 
-	SECRET_KEY = 'hello'
+	SESSION_TYPE = 'filesystem'  # 自增配置解决no secret key的bug
+	SECRET_KEY = 'hello-world'
 
 	SESSION = 'redis'  # 指定session保存到redis
 	SESSION_USER_SIGNER = True  # 让cookie中的session_id被加密签名处理

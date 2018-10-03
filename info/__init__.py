@@ -16,7 +16,7 @@ from flask_sqlalchemy import SQLAlchemy
 import redis
 # 4. 包含请求体的请求中都要开启CSRF
 # CSRFProtect只做验证工作，cookie中的 csrf_token 和表单中的 csrf_token 需要我们自己实现
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect, generate_csrf
 # 5. session数据要保存到Redis中
 from flask_session import Session
 
@@ -31,6 +31,7 @@ from logging.handlers import RotatingFileHandler
 # db = SQLAlchemy(app)
 # # redis存储对象
 # redis_store = redis.StrictRedis(host=Config.REDIS_HOST, port=Config.REDIS_PORT)
+from info.utils.common import do_index_class
 
 db = SQLAlchemy()
 """
@@ -82,7 +83,21 @@ def create_app(config_name):
 	3. 自动校验这两个值,相等为正常请求,不等为非法请求
 	"""
 	# TODO: 暂时csrf的校验
-	# csrf = CSRFProtect(app)
+	csrf = CSRFProtect(app)
+
+	# 使用钩子函数将csrf_token带回给浏览器
+	@app.after_request
+	def set_csrftoken(response):
+		"""设置csrf值"""
+		csrf_token = generate_csrf()
+		# 借用response.set_cookie方法设置到浏览器的cookie中保存
+		response.set_cookie('csrf_token', csrf_token)
+		# 返回响应对象
+		return response
+
+	# 添加自定义的过滤器
+	app.add_template_filter(do_index_class, 'do_index_class')
+
 	# 设置session保存位置
 	Session(app)
 
