@@ -54,10 +54,26 @@ def index():
 		news_dict = news_obj.to_dict()
 		news_rank_dict_list.append(news_dict)
 
+	# --------------------------查询新闻分类-------------------------------
+	"""
+	请求根路由的时候去查询新闻分类,并默认第一个被选中
+	"""
+	# 获取新闻分类数据
+	categories = Category.query.all()
+	# 定义列表保存分类数据
+	categories_dicts = []
+
+	# TODO: 注意此处与课件的不同
+	for category in categories:
+		# 拼接内容
+		categories_dicts.append(category.to_dict())
+
+	print(categories_dicts)
 	# 组织响应数据字典
 	data = {
 		'user_info': user.to_dict() if user else None,
-		'news_info': news_rank_dict_list
+		'news_info': news_rank_dict_list,
+		'categories': categories_dicts
 	}
 
 	# 返回模板
