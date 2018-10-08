@@ -1,7 +1,7 @@
 var currentCid = 1; // 当前分类 id
 var cur_page = 1; // 当前页
 var total_page = 1;  // 总页数
-var data_querying = true;   // 是否正在向后台获取数据,false表示没有用户在请求数据
+var data_querying = false;   // 是否正在向后台获取数据的标志,false表示没有用户在请求数据
 
 
 $(function () {
@@ -14,7 +14,7 @@ $(function () {
         var clickCid = $(this).attr('data-cid');
         $('.menu li').each(function () {
             $(this).removeClass('active')
-        })
+        });
         $(this).addClass('active');
 
         if (clickCid != currentCid) {
@@ -24,8 +24,6 @@ $(function () {
             // 重置分页参数
             cur_page = 1;
             total_page = 1;
-
-            data_querying = false;
 
             updateNewsData()
         }
@@ -44,11 +42,15 @@ $(function () {
         var canScrollHeight = pageHeight - showHeight;
 
         // 页面滚动了多少,这个是随着页面滚动实时变化的
-        var nowScroll = $(document).scrollTop;
+        var nowScroll = $(document).scrollTop();
 
+        // 当底边还剩100的高度时,提前加载需要显式的新闻数据
         if ((canScrollHeight - nowScroll) < 100) {
             // TODO 判断页数，去更新新闻数据
 
+            console.log('距离不足100');  // TODO: 测试
+
+            // 当需要加载数据时
             if (!data_querying) {
                 // 如果当前页面数还没有到达总页数则加载新的页面
                 if (cur_page <= total_page) {
@@ -85,7 +87,7 @@ function updateNewsData() {
                 $('.list_con').html('')
             }
 
-            // 设置`数据正在查询数据`变量为false,以便下次上拉加载
+            // 每次更新之后重新设置标志位,下次可以重新上拉加载
             data_querying = false;
 
             // 当前页数递增

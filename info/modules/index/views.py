@@ -109,7 +109,7 @@ URL：/news_list
 传入参数：JSON格式
 参数:
 参数名		类型		是否必须		参数说明
-cid			string	是			分类id
+cid			string	是			顶层的类别id
 page		int		否			当前页数，不传即获取第1页
 per_page	int		否			每页多少条数据，如果不传，默认10条
 
@@ -140,7 +140,7 @@ def get_news_list():
 	param_dict = request.args  # 参数字典
 	page = param_dict.get('p', '1')  # 当前页面,默认为1
 	per_page = param_dict.get('per_page', constants.HOME_PAGE_MAX_NEWS)  # 每页的新闻条数,默认为10
-	cid = param_dict.get('cid', '1')  # 新闻分类
+	cid = param_dict.get('cid', '1')  # 新闻分类,默认为1,即'最新'
 
 	# 非空判断
 	if not cid:
@@ -177,7 +177,7 @@ def get_news_list():
 		current_app.logger.error(e)
 		return jsonify(erron=RET.DBERR, errmsg='查询分页数据异常')
 
-	# 新闻列表
+	# 对象列表转换成新闻字典列表
 	news_dict_list = []
 	for news in news_list if news_list else []:
 		news_dict_list.append(news.to_dict())
