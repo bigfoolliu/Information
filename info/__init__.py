@@ -109,5 +109,8 @@ def create_app(config_name):
 	# 将注册蓝图注册到app
 	from info.modules.passport import passport_bp
 	app.register_blueprint(passport_bp)
+	# 将新闻详情蓝图注册到app
+	from info.modules.news import news_bp
+	app.register_blueprint(news_bp)
 
 	return app

@@ -110,7 +110,7 @@ def send_sms_code():
 	# 根据上面的接口格式,获取json格式的数据(前端需要根据该接口写ajax返回json格式参数)
 	# 首先获取json格式数据,并将其转成python字典类型便于提取参数
 	param_dict = request.json
-	print("param_dict:", type(param_dict), param_dict)  # TODO: 测试
+	# print("param_dict:", type(param_dict), param_dict)  # 测试
 
 	# 获取该字典中的所有参数值,为方式报错,使用字典的get方法,从而可以设置默认值为空
 	mobile = param_dict.get('mobile', '')

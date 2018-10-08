@@ -9,25 +9,25 @@ $(function(){
     // 打开登录框
     $('.comment_form_logout').click(function () {
         $('.login_form_con').show();
-    })
+    });
 
     // 收藏
     $(".collection").click(function () {
 
        
-    })
+    });
 
     // 取消收藏
     $(".collected").click(function () {
 
      
-    })
+    });
 
         // 评论提交
     $(".comment_form").submit(function (e) {
         e.preventDefault();
 
-    })
+    });
 
     $('.comment_list_con').delegate('a,input','click',function(){
 
@@ -59,15 +59,15 @@ $(function(){
         {
             alert('回复评论')
         }
-    })
 
+    });
         // 关注当前新闻作者
     $(".focus").click(function () {
 
-    })
+    });
 
     // 取消关注当前新闻作者
     $(".focused").click(function () {
 
     })
-})
+});

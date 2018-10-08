@@ -19,3 +19,15 @@ def do_index_class(index):
 		return 'third'
 	else:
 		return ''
+
+
+# 获取当前登录用户信息的装饰器
+def user_login_data(view_func):
+	""""""
+
+	def wrapper():
+		""""""
+		pass
+
+	return wrapper
+

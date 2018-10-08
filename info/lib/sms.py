@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 
-# TODO: 自己设置的基于python3的特性#, 全局取消证书验证
+# 自己设置的基于python3的特性#, 全局取消证书验证
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 

@@ -58,17 +58,23 @@ def index():
 	"""
 	请求根路由的时候去查询新闻分类,并默认第一个被选中
 	"""
-	# 获取新闻分类数据
-	categories = Category.query.all()
+	categories = None
+	try:
+		# 获取新闻分类数据
+		categories = Category.query.all()
+	except Exception as e:
+		current_app.logger.error(e)
+		jsonify(erron=RET.DBERR, errmsg='mysql查询数据异常')
+
 	# 定义列表保存分类数据
 	categories_dicts = []
 
-	# TODO: 注意此处与课件的不同
+	# 注意此处与课件的不同
 	for category in categories:
 		# 拼接内容
 		categories_dicts.append(category.to_dict())
 
-	print(categories_dicts)
+	# print(categories_dicts)
 	# 组织响应数据字典
 	data = {
 		'user_info': user.to_dict() if user else None,
@@ -86,7 +92,7 @@ def favicon():
 	返回网页tab的图标
 	:return:
 	"""
-	return current_app.send_static_file('news/favicon.ico')  # TODO: 注意路径是相对于静态目录
+	return current_app.send_static_file('news/favicon.ico')  # 注意路径是相对于静态目录
 
 
 """
@@ -98,13 +104,13 @@ def favicon():
 
 接口设计:
 
-URL：/newslist
+URL：/news_list
 请求方式：GET
 传入参数：JSON格式
 参数:
 参数名		类型		是否必须		参数说明
 cid			string	是			分类id
-page		int		否			页数，不传即获取第1页
+page		int		否			当前页数，不传即获取第1页
 per_page	int		否			每页多少条数据，如果不传，默认10条
 
 返回类型：JSON
@@ -115,63 +121,77 @@ cid							string	是		当前新闻数据的分类id
 total_page					int		否		总页数
 current_page				int		否		当前页数
 news_dict_list				list	否		新闻列表数据
-newsList.title				string	是		新闻标题
-newsList.source				string	是		新闻来源
-newsList.digest				string	是		新闻摘要
-newsList.create_time		string	是		新闻时间
-newsList.index_image_url	string	是		新闻索引图
+news_list.title				string	是		新闻标题
+news_list.source			string	是		新闻来源
+news_list.digest			string	是		新闻摘要
+news_list.create_time		string	是		新闻时间
+news_list.index_image_url	string	是		新闻索引图
 
 """
 
 
-@index_bp.route('/newslist')
+@index_bp.route('/news_list')
 def get_news_list():
 	"""
 	新闻列表的后端接口
 	:return:
 	"""
 	# 获取参数
-	args_dict = request.args
-	page = args_dict.get('p', '1')
-	per_page = args_dict.get('per_page', constants.HOME_PAGE_MAX_NEWS)
-	category_id = args_dict.get('cid', '1')
+	param_dict = request.args  # 参数字典
+	page = param_dict.get('p', '1')  # 当前页面,默认为1
+	per_page = param_dict.get('per_page', constants.HOME_PAGE_MAX_NEWS)  # 每页的新闻条数,默认为10
+	cid = param_dict.get('cid', '1')  # 新闻分类
 
-	# 校验参数
+	# 非空判断
+	if not cid:
+		return jsonify(erron=RET.PARAMERR, errmsg='参数cid不存在')
+
 	try:
+		# 数据类型转换
+		cid = int(cid)
 		page = int(page)
 		per_page = int(per_page)
 	except Exception as e:
 		current_app.logger.error(e)
-		return jsonify(erron=RET.PARAMERR, errmsg='参数错误')
+		return jsonify(erron=RET.PARAMERR, errmsg='参数内容格式错误')
 
 	# 查询数据并分页
 	filters = []
 	# 如果分类id不为1,添加分类id的过滤
-	if category_id != '1':
-		filters.append(News.category_id == category_id)
+	if cid != 1:
+		# == 在sqlalchemy底层有重写__eq__方法，改变了该返回值，返回是一个查询条件
+		filters.append(News.category_id == cid)
+
+	# 分页查询,利用*filters拆包
 	try:
-		# 分页,根据新闻创建时间倒序,分页函数paginate()
-		paginate = News.query.filter(*filters).order_by(News.create_time.desc()).paginate(page, per_page, False)
-		# 获取查询出来的数据
-		items = paginate.items
+		# 分页,根据新闻创建时间倒序,分页函数paginate(),得到是paginate对象
+		paginate = News.query.filter(*filters).\
+			order_by(News.create_time.desc()).paginate(page, per_page, False)
+		# 获取查询出来页码的所有数据
+		news_list = paginate.items
 		# 获取到总的页数
 		total_page = paginate.pages
+		# 获取到当前的页码
 		current_page = paginate.page
 	except Exception as e:
 		current_app.logger.error(e)
-		return jsonify(erron=RET.DBERR, errmsg='数据查询失败')
+		return jsonify(erron=RET.DBERR, errmsg='查询分页数据异常')
 
 	# 新闻列表
-	news_li = []
-	for news in items:
-		news_li.append(news.to_basic_dict())
+	news_dict_list = []
+	for news in news_list if news_list else []:
+		news_dict_list.append(news.to_dict())
+
+	data = {
+		'news_list': news_dict_list,
+		'current_page': current_page,
+		'total_page': total_page
+	}
 
 	# 返回数据
 	return jsonify(
 		erron=RET.OK,
-		errmsg='OK',
-		total_page=total_page,
-		current_page=current_page,
-		newslist=news_li,
-		cid=category_id)
+		errmsg='新闻详细数据查询成功',
+		data=data
+	)
 
