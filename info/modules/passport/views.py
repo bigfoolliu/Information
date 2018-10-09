@@ -38,11 +38,11 @@ def get_image_code():
 	4. 返回值
 	"""
 	# 从请求request中获取code_id(即uuid码)
-	code_id = request.args.get('code_id')
+	code_id = request.args.get('code_id', '')
 
 	# 非空判断,为空则404报错
 	if not code_id:
-		current_app.logger.error('参数不足.')
+		current_app.logger.error('参数不足')
 		abort(404)
 	"""
 	生成验证码图片,包括名字,验证码值,以及图片(返回的是二进制的数据)
@@ -123,7 +123,7 @@ def send_sms_code():
 		current_app.logger.error('参数不足.')
 		# 利用flask中的jsonify模块将字典转换为json数据返回给前端, jsonify函数的两种使用方式,推荐使用参数
 		# 错误码为response_code.py文件中定义好的
-		return jsonify({'errno': RET.PARAMERR, 'errmsg': '参数不足'})
+		return jsonify(errno=RET.PARAMERR, errmsg='参数不足')
 
 	# 参数均填写完整
 	# 手机号正则校验
@@ -168,6 +168,9 @@ def send_sms_code():
 	# 用户未注册,发送6位随机短信验证码,不到六位用0补全
 	sms_code = random.randint(0, 999999)
 	sms_code = '%6d' % sms_code
+
+	current_app.logger.debug(sms_code)
+
 	try:
 		"""
 		使用第三方sdk
@@ -178,11 +181,13 @@ def send_sms_code():
 				sms_code: sdk内置的响应码,000000表示成功,其他的表示对应的错误信息
 				constants.SMS_CODE_REDIS_EXPIRES/60: 验证码过期时间,单位为分钟
 		"""
-		result = CCP().send_template_sms(mobile, {sms_code, constants.SMS_CODE_REDIS_EXPIRES/60}, 1)
+		# TODO: 注意此处必须为中括号
+		result = CCP().send_template_sms(mobile, [sms_code, constants.SMS_CODE_REDIS_EXPIRES/60], 1)
 	# 发送不了以及返回值result不为0均为错误
 	except Exception as e:
 		current_app.logger.error(e)
 		return jsonify(erron=RET.THIRDERR, errmsg='云通讯平台出现异常')
+
 	if result != 0:
 		return jsonify(erron=RET.THIRDERR, errmsg='云通讯平台出现异常')
 
@@ -272,7 +277,6 @@ def register():
 	user = User()
 	user.mobile = mobile
 	user.nick_name = mobile
-	user.password = password
 	# 当前注册成功时间作为最近一次的登录时间
 	user.last_login = datetime.datetime.now()
 	user.password = password  # 此处赋值已经将密码进行了哈希化处理存储
@@ -290,7 +294,7 @@ def register():
 
 	# 注册成功,自动登录并在会话中记录用户的信息
 	session['user_id'] = user.id
-	session['nick_name'] = user.nick_name
+	session['nick_name'] = user.mobile
 	session['mobile'] = user.mobile
 
 	# 返回注册成功
@@ -333,7 +337,7 @@ def login():
 	"""
 	params_dict = request.json
 	mobile = params_dict.get('mobile', '')
-	password = params_dict.get('mobile', '')
+	password = params_dict.get('password', '')
 
 	if not all([mobile, password]):
 		return jsonify(erron=RET.PARAMERR, errmsg='参数不足')
@@ -349,6 +353,7 @@ def login():
 		current_app.logger.error(e)
 		return jsonify(erron=RET.DBERR, errmsg='mysql数据库查询异常')
 
+	# 如果用户不存在
 	if not user:
 		return jsonify(erron=RET.NODATA, errmsg='用户不存在')
 
@@ -382,5 +387,5 @@ def login_out():
 	# 直接将用户的会话信息删除
 	session.pop('user_id')
 	session.pop('mobile')
-	session.pop('mobile')
+	session.pop('nick_name')
 	return jsonify(erron=RET.OK, errmsg='退出登录成功')

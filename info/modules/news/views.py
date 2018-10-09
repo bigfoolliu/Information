@@ -40,13 +40,13 @@ def news_detail(news_id):
 		return jsonify(erron=RET.DBERR, errmsg='数据库获取新闻新闻点击排行数据异常')
 
 	# 字典列表初始化
-	news_rank_list = []
+	news_rank_dict_list = []
 	# 将新闻对象列表转换为字典列表
 	for news_obj in news_rank_list if news_rank_list else []:
 		# 将新闻对象转换为字典
 		news_dict = news_obj.to_dict()
 		# 构建字典列表
-		news_rank_list.append(news_dict)
+		news_rank_dict_list.append(news_dict)
 
 	# -----------------------获取新闻详情数据---------------------------
 	try:
@@ -71,7 +71,7 @@ def news_detail(news_id):
 	# 组织响应数据字典
 	data = {
 		'user_info': user.to_dict() if user else None,
-		'news_rank_list': news_rank_list,
+		'news_rank_list': news_rank_dict_list,
 		'news': news_dict,
 		'is_collected': is_collected
 	}
@@ -137,6 +137,7 @@ def news_collect():
 	try:
 		db.session.commit()
 	except Exception as e:
+		db.session.rollback()  # 注意: 数据库提交异常的回滚操作
 		current_app.logger.error(e)
 		return jsonify(erron=RET.DBERR, errmsg='数据库保存新闻列表数据异常')
 

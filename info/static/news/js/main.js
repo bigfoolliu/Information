@@ -184,9 +184,12 @@ $(function(){
             'password': password
         };
 
+		// TODO: 注册按钮点击测试
+        console.log('注册按钮点击');
+
         // 发起注册请求
         $.ajax({
-            url: 'passport/register',
+            url: '/passport/register',
             type: 'POST',
             // 将js对象转换为json字符串
             data: JSON.stringify(params),
@@ -265,6 +268,9 @@ function sendSMSCode() {
         contentType: 'application/json',
         //接收数据类型也是json格式
         dataType: 'json',
+        headers: {
+             "X-CSRFToken" : getCookie("csrf_token")
+         },
         success:function (resp) {
             //发送短信成功的回调函数,参数resp为前端自定义
             if (resp.errno == 0){

@@ -31,11 +31,10 @@ import functools
 # 解决代码重复率过高的问题
 def user_login_data(view_func):
 	"""
-	使用装饰器改变被装饰函数的一些特性,比如函数名称,
-	为了解决该问题,使用functools模块解决该问题
 	:param view_func:
 	:return:
 	"""
+	# 使用装饰器改变被装饰函数的一些特性,比如函数名称,为了解决该问题,使用functools模块解决该问题
 	@functools.wraps(view_func)
 	def wrapper(*args, **kwargs):
 		# 1. 实现装饰器的功能

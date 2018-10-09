@@ -43,7 +43,7 @@ def index():
 
 	# 将获取到的新闻列表转换为字典列表[news1, news2, ...]----->[{news1}, {news2}, ...]
 	news_rank_dict_list = []
-	for news_obj in news_rank_list:
+	for news_obj in news_rank_list if news_rank_list else []:
 		news_dict = news_obj.to_dict()
 		news_rank_dict_list.append(news_dict)
 
@@ -60,19 +60,19 @@ def index():
 		jsonify(erron=RET.DBERR, errmsg='mysql查询数据异常')
 
 	# 定义列表保存分类数据
-	categories_dicts = []
+	category_dict_list = []
 
 	# 注意此处与课件的不同
-	for category in categories:
+	for category in categories if categories else []:
 		# 拼接内容
-		categories_dicts.append(category.to_dict())
+		category_dict_list.append(category.to_dict())
 
 	# print(categories_dicts)
 	# 组织响应数据字典
 	data = {
 		'user_info': user.to_dict() if user else None,
-		'news_info': news_rank_dict_list,
-		'categories': categories_dicts
+		'news_rank_list': news_rank_dict_list,
+		'categories': category_dict_list
 	}
 
 	# 返回模板
