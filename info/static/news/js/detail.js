@@ -13,13 +13,81 @@ $(function(){
 
     // 收藏
     $(".collection").click(function () {
+        // 点击收藏按钮,向后端发送post请求
+        var news_id = $('.collection').attr('data-newsid');
+        var action = 'collect';
 
+        // 组织参数
+        var params = {
+            'news_id': news_id,
+            'action': action
+        };
+
+        // 发送请求
+        $.ajax({
+            url: '/news/news_collect',
+            type: 'post',
+            contentType: 'application/json',
+            headers: {
+                'X-CSRFToken': getCookie('csrf_token')
+            },
+            data: JSON.stringify(params),
+            success: function (resp) {
+                if (resp.errno == '0'){
+                    // 收藏成功
+                    // 隐藏收藏按钮
+                    $('.collection').hide();
+                    // 显示已收藏按钮
+                    $('.collected').show();
+                }else if (resp.errno == '4101'){
+                    // 用户未登录
+                    $('.login_form_con').show();
+                }else {
+                    alert(resp.errmsg);
+                }
+            }
+        })
        
     });
 
     // 取消收藏
     $(".collected").click(function () {
+        // 点击取消收藏按钮,向后端发送post请求
+        var news_id = $('.collected').attr('data-newsid');
+        var action = 'cancel_collect';
 
+        // 组织参数
+        var params = {
+            'news_id': news_id,
+            'action': action
+        };
+        
+        // 发送请求
+        $.ajax({
+            url: '/news/news_collect',
+            type: 'post',
+            contentType: 'application/json',
+            headers: {
+                'X-CSRFToken': getCookie('csrf_token')
+            },
+            data: JSON.stringify(params),
+            success: function (resp) {
+                if (resp.errno == '0'){
+                    // 取消收藏成功
+                    // 显示收藏按钮
+                    $('.collection').show();
+                    // 隐藏已收藏按钮
+                    $('.collected').hide();
+                }else if (resp.errno == '4101'){
+                    // 用户未登录
+                    $('.login_form_con').show();
+                }else {
+                    alert(resp.errmsg);
+                }
+
+            }
+            
+        })
      
     });
 

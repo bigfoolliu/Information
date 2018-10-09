@@ -155,6 +155,7 @@ class News(BaseModel, db.Model):
 	"""
 	comments = db.relationship('Comment', lazy='dynamic')
 
+	# 自定义多个不同的方法,将其装换为不同类型的字典,可便于之后的属性获取
 	def to_review_dict(self):
 		resp_dict = {
 			'id': self.id,

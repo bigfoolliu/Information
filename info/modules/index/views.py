@@ -8,12 +8,13 @@
 /info/modules/index/views.py存放当前模块的所有视图函数
 """
 # 导入蓝图
+from info.utils.common import user_login_data
 from info.utils.response_code import RET
 from . import index_bp
 
 # import logging
 from info import redis_store, constants
-from flask import current_app, session, jsonify, request
+from flask import current_app, session, jsonify, request, g
 # 导入创建好的模型,即与模型进行关联
 from info.models import User, News, Comment, Category, CommentLike
 
@@ -21,22 +22,14 @@ from flask import render_template
 
 
 @index_bp.route('/')
+@user_login_data
 def index():
 	"""
 	返回新闻首页
 	:return:
 	"""
-	# --------------------------获取用户登录信息----------------------------
-	# 获取当前登录用户的id
-	user_id = session.get('user_id')
-	user = None  # type:User
-	# 通过id查询用户对象
-	if user_id:
-		try:
-			user = User.query.get(user_id)
-		except Exception as e:
-			current_app.logger.error(e)
-			return jsonify(erron=RET.DBERR, errmsg='mysql查询用户对象异常')
+	# 通过装饰器中的g对象获取当前登录的用户,而将之前的验证代码删除
+	user = g.user
 
 	# -------------------------获取新闻点击排行数据--------------------------
 	"""
@@ -112,21 +105,6 @@ URL：/news_list
 cid			string	是			顶层的类别id
 page		int		否			当前页数，不传即获取第1页
 per_page	int		否			每页多少条数据，如果不传，默认10条
-
-返回类型：JSON
-参数名						类型		是否必须	参数说明
-errno						int		是		错误码
-errmsg						string	是		错误信息
-cid							string	是		当前新闻数据的分类id
-total_page					int		否		总页数
-current_page				int		否		当前页数
-news_dict_list				list	否		新闻列表数据
-news_list.title				string	是		新闻标题
-news_list.source			string	是		新闻来源
-news_list.digest			string	是		新闻摘要
-news_list.create_time		string	是		新闻时间
-news_list.index_image_url	string	是		新闻索引图
-
 """
 
 
