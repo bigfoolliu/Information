@@ -9,7 +9,7 @@ info/__init__.py主要做app的创建,初始化工作
 """
 
 # 1. 基本配置
-from flask import Flask
+from flask import Flask, g, render_template
 # 2. 导入数据库扩展并填写相关配置
 from flask_sqlalchemy import SQLAlchemy
 # 3. 创建Redis存储对象,并在配置中填写相关配置
@@ -31,7 +31,7 @@ from logging.handlers import RotatingFileHandler
 # db = SQLAlchemy(app)
 # # redis存储对象
 # redis_store = redis.StrictRedis(host=Config.REDIS_HOST, port=Config.REDIS_PORT)
-from info.utils.common import do_index_class
+from info.utils.common import do_index_class, user_login_data
 
 db = SQLAlchemy()
 """
@@ -94,6 +94,19 @@ def create_app(config_name):
 		# 返回响应对象
 		return response
 
+	"""捕获404页面,将页面统一处理"""
+	@app.errorhandler(404)
+	@user_login_data
+	def error_handler(err):
+		# 捕获用户对象
+		user = g.user
+		# 对象转为字典
+		data = {
+			'user_info': user.to_dict() if user else None
+		}
+		# 渲染模板
+		return render_template('news/404.html', data=data)
+
 	# 添加自定义的过滤器(参数1位自定义的过滤器函数名,函数2为之后在jinjia模板中使用的过滤器名称)
 	app.add_template_filter(do_index_class, 'do_index_class')
 
@@ -106,9 +119,11 @@ def create_app(config_name):
 	"""
 	from info.modules.index import index_bp
 	app.register_blueprint(index_bp)
+
 	# 将注册蓝图注册到app
 	from info.modules.passport import passport_bp
 	app.register_blueprint(passport_bp)
+
 	# 将新闻详情蓝图注册到app
 	from info.modules.news import news_bp
 	app.register_blueprint(news_bp)
