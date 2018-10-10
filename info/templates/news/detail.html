@@ -84,9 +84,10 @@
                         <a href="javascript:;" class="comment_up has_comment_up fr">1</a>
                         <a href="javascript:;" class="comment_reply fr">回复</a>
 
-                        <from class="reply_form fl" data-commentid="{{ comment.id }}" data-newsid="{{ comment.news.id }}">
+                        {# 回复评论表单 #}
+                        <from class="reply_form fl" data-commentid="{{ comment.id }}" data-newsid="{{ data.news.id }}">
                             <textarea  class="reply_input"></textarea>
-                            <input type="submit" name="" value="回复" class="reply_sub fr">
+                            <input type="button" name="" value="回复" class="reply_sub fr">
                             <input type="reset" name="" value="取消" class="reply_cancel fr">
                         </from>
                     </div>
