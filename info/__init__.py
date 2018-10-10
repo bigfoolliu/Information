@@ -128,4 +128,8 @@ def create_app(config_name):
 	from info.modules.news import news_bp
 	app.register_blueprint(news_bp)
 
+	# 将个人中心蓝图注册到app
+	from info.modules.profile import profile_bp
+	app.register_blueprint(profile_bp)
+
 	return app
