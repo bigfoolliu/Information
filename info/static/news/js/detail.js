@@ -6,6 +6,9 @@ function getCookie(name) {
 
 $(function(){
 
+    // 每次进入就需要更新评论数量
+    updateCommentCount();
+
     // 打开登录框
     $('.comment_form_logout').click(function () {
         $('.login_form_con').show();
@@ -273,7 +276,7 @@ $(function(){
                 'news_id': news_id,
                 'comment': comment,
                 'parent_id': parent_id
-            }
+            };
 
             $.ajax({
                 url: '/news/news_comment',
