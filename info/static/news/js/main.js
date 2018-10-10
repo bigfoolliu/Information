@@ -105,6 +105,7 @@ $(function(){
 
         // TODO: 注意此处将默认的提交表单请求进行了阻止
         e.preventDefault();
+
         var mobile = $(".login_form #mobile").val();
         var password = $(".login_form #password").val();
 
@@ -118,11 +119,13 @@ $(function(){
             return;
         }
 
-        // 发起登录请求
+        // 组织登录请求参数
         var params = {
             'mobile': mobile,
             'password': password
         };
+
+        // 发起登录请求
         $.ajax({
             url: '/passport/login',
             type: 'POST',
@@ -132,10 +135,11 @@ $(function(){
             headers: {
                 'X-CSRFToken': getCookie('csrf_token')
             },
+            // 请求成功的回调函数
             success: function (resp) {
-                if (resp.errno == '0'){
+                if (resp.erron == "0") {
                     // 返回成功,刷新页面
-                    location.reload()
+                    location.reload();
                 }else{
                     $('#login-password-err').html(resp.errmsg);
                     $('#register-password-err').show()
@@ -184,9 +188,6 @@ $(function(){
             'password': password
         };
 
-		// TODO: 注册按钮点击测试
-        console.log('注册按钮点击');
-
         // 发起注册请求
         $.ajax({
             url: '/passport/register',
@@ -201,9 +202,9 @@ $(function(){
             headers: {
               'X-CSRFToken' : getCookie('csrf_token')
             },
-            success: function (resp) {
+            success: function(resp) {
                 // 回调函数,即当响应成功之后执行
-                if (resp.errno == '0'){
+                if(resp.errno == '0'){
                     // 注册成功,刷新页面从而将表单隐藏
                     window.location.reload()
                 }else{
