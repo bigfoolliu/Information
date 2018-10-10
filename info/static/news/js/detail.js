@@ -181,16 +181,74 @@ $(function(){
             $(this).parent().toggle();
         }
 
+        // TODO: 点赞/取消点赞前端接口
         if(sHandler.indexOf('comment_up')>=0)
         {
             var $this = $(this);
+            // 点赞/取消点赞行文
+            var action = 'add';
+
             if(sHandler.indexOf('has_comment_up')>=0)
             {
-                // 如果当前该评论已经是点赞状态，再次点击会进行到此代码块内，代表要取消点赞
-                $this.removeClass('has_comment_up')
-            }else {
-                $this.addClass('has_comment_up')
+                // 如果当前评论已经是点赞状态,再次点击会进入此代码块,表示取消点赞
+                action = 'remove'
             }
+
+            // 评论id
+            var comment_id = $(this).attr('data-commentid');
+            // 组织请求参数
+            var params = {
+                'comment_id': comment_id,
+                'action': action
+            };
+            
+            $.ajax({
+                url: '/news/comment_like',
+                type: 'POST',
+                contentType: 'application/json',
+                headers: {
+                    'X-CSRFToken': getCookie('csrf_token')
+                },
+                data: JSON.stringify(params),
+                success: function (resp) {
+                    // 点赞/取消点赞成功
+
+                    if(resp.erron == '0'){
+                        // 获取当前点赞数目
+                        var like_count = $this.attr('data-likecount');
+
+                        if(like_count == undefined){
+                            like_count = 0
+                        }
+
+                        // 更新点赞按钮图标
+                        if(action == 'add'){
+                            // 点赞
+                            like_count = parseInt(like_count) + 1;
+                            $this.addClass('has_comment_up')
+                        }else{
+                            // 取消点赞
+                            like_count = parseInt(like_count) - 1;
+                            $this.removeClass('has_comment_up')
+                        }
+
+                        // 更新点赞数据
+                        $this.attr('data-likecount', like_count);
+
+                        if(like_count <= 0){
+                            $this.html('赞')
+                        }else{
+                            $this.html(like_count)
+                        }
+                    }else if(resp.erron == '4101'){
+                        // 弹出登录框
+                        $('.login_form_con').show()
+                    }else{
+                        // 展示错误
+                        alert(resp.errmsg)
+                    }
+                }
+            })
         }
 
         // 发布评论(子评论)
@@ -277,7 +335,8 @@ $(function(){
         }
 
     });
-        // 关注当前新闻作者
+
+    // 关注当前新闻作者
     $(".focus").click(function () {
 
     });

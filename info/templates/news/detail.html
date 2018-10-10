@@ -47,7 +47,7 @@
 
             {# 评论条数 #}
             <div class="comment_count">
-                {{ data.news.commments_count }}
+                {{ data.news.commments_count }}条评论
             </div>
 
             {# 评论具体内容 #}
@@ -81,8 +81,22 @@
                          {# 评论发布时间 #}
                         <div class="comment_time fl">{{ comment.create_time }}</div>
 
-                        <a href="javascript:;" class="comment_up has_comment_up fr">1</a>
-                        <a href="javascript:;" class="comment_reply fr">回复</a>
+                        {# 点赞按钮 #}
+                        <a href="javascript:;" class="comment_up
+                            {# 根据是否点过赞显示不同样式的点赞按钮 #}
+                            {% if comment.is_like %}
+                                has_comment_up
+                            {% endif %} fr"
+                                data-commentid="{{ comment.id }}"
+                                data-likecount="{{ comment.like_count }}"
+                                data-newsid="{{ data.news.id }}">
+                            {# 显示不同的数量的赞 #}
+                            {% if comment.like_count > 0 %}
+                                {{ comment.like_count }}
+                            {% else %}
+                                赞
+                            {% endif %}
+                        </a>
 
                         {# 回复评论表单 #}
                         <from class="reply_form fl" data-commentid="{{ comment.id }}" data-newsid="{{ data.news.id }}">

@@ -12,11 +12,111 @@
 from flask import render_template, g, current_app, jsonify, request
 
 from info import constants, db
-from info.models import News, Comment
+from info.models import News, Comment, CommentLike
 from info.modules.news import news_bp
 from info.utils.common import user_login_data
 
 from info.utils.response_code import RET
+
+
+# 访问接口: 127.0.0.1:5000/news/comment_like
+@news_bp.route('/comment_like', methods=['POST'])
+@user_login_data
+def comment_like():
+	"""
+	评论点赞后端接口
+	1. 获取参数
+		comment_id: 被点赞的评论id
+		user: 点赞的用户
+		action: 点赞/取消点赞
+	2. 校验参数
+	3. 逻辑处理
+		根据comment_id来查询被点赞的评论
+		action为add表示点赞: 先查询评论点赞commentlike模型对象是否存在,不存在则创建
+		action为remove表示取消点赞: 先查询评论点赞commentlike模型对象是否存在, 存在则删除
+		将commmentlike模型对象保存至数据库
+	4. 返回值
+	:return:
+	"""
+	# 获取参数
+	params_dict = request.json
+	comment_id = params_dict.get('comment_id')
+	action = params_dict.get('action')
+
+	# 获取当前用户
+	user = g.user
+
+	# 校验参数
+	if not all([comment_id, action]):
+		return jsonify(erron=RET.PARAMERR, errmsg='参数不足')
+
+	if not user:
+		return jsonify(erron=RET.SESSIONERR, errmsg='用户未登录')
+
+	# action只能为两种[add, remove]
+	if action not in ['add', 'remove']:
+		return jsonify(erron=RET.PARAMERR, errmsg='action参数错误')
+
+	# 根据comment_id查询被点赞的评论对象
+	try:
+		comment = Comment.query.get(comment_id)
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='数据库查询评论对象异常')
+
+	if not comment:
+		return jsonify(erron=RET.NODATA, errmsg='评论不存在')
+
+	# action为add表示点赞
+	if action == 'add':
+		# 查询commentlike对象是否存在
+		try:
+			commentlike = CommentLike.query.filter(
+				CommentLike.comment_id == comment_id,
+				CommentLike.user_id == user.id
+			).first()
+		except Exception as e:
+			current_app.logger.error(e)
+			return jsonify(erron=RET.DBERR, errmsg='数据库查询评论点赞数据异常')
+
+		if not commentlike:
+			# 创建commentlike对象
+			commentlike_obj = CommentLike()
+			commentlike_obj.comment_id = comment_id
+			commentlike_obj.user_id = user.id
+
+			# 添加数据至数据库
+			db.session.commit()
+			# 评论对象中的总评论条数累加
+		comment.like_count += 1
+	# action为remove表示取消点赞
+	else:
+		try:
+			commentlike = CommentLike.query.filter(
+				CommentLike.comment_id == comment_id,
+				CommentLike.user_id == user.id
+			).first()
+		except Exception as e:
+			current_app.logger.error(e)
+			return jsonify(erron=RET.DBERR, errmsg='数据库查询评论点赞数据异常')
+
+		if commentlike:
+			# 删除commentlike对象
+			# 将维护用户和评论之前的第三张表的对象删除，即表示取消点赞
+			db.session.delete(commentlike)
+			# 评论对象上的总评论条数减一
+			comment.like_count -= 1
+
+	# 将commentlike对象的修改提交到数据库
+	try:
+		db.session.commit()
+	except Exception as e:
+		current_app.logger.error(e)
+		db.session.rollback()
+		jsonify(erron=RET.DBERR, errmsg='点赞/取消点赞失败')
+
+	# 返回值
+	return jsonify(erron=RET.OK, errmsg='OK')
 
 
 # 访问接口: 127.0.0.1:5000/news/news_comment
@@ -77,11 +177,8 @@ def news_comment():
 		current_app.logger.error(e)
 		return jsonify(erron=RET.DBERR, errmsg='数据库保存评论异常')
 
-	# 组织响应数据
-	data = comment_obj.to_dict()
-
 	# 返回值
-	return jsonify(erron=RET.OK, errmsg='发布评论成功', data=data)
+	return jsonify(erron=RET.OK, errmsg='发布评论成功', data=comment_obj.to_dict())
 
 
 # 访问接口: 127.0.0.1:5000/news/23
@@ -140,11 +237,35 @@ def news_detail(news_id):
 		current_app.logger.error(e)
 		return jsonify(erron=RET.DBERR, errmsg='数据库查询评论列表失败')
 
+	# ----------------------查询当前用户在当前新闻的评论里边具体点赞了哪几条评论------------
+	# 查询出当前新闻的所有评论,取得所有评论的id
+	comment_id_list = [comment.id for comment in comments]
+
+	# 通过评论点赞模型查询当前用户点赞了哪几条评论
+	try:
+		commentlike_model_list = CommentLike.query.filter(
+			CommentLike.user_id == user.id,
+			CommentLike.comment_id.in_(comment_id_list)  # TODO: 注意此处的in_
+		).all()
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='数据库查询评论点赞列表数据异常')
+
+	# 遍历上一步的评论点赞模型列表,获取所有点赞过的评论id
+	commentlike_id_list = [commentlike_model.comment_id for commentlike_model in commentlike_model_list]
+
 	# 对象列表转换为字典列表
 	comment_dict_list = []
 
 	for comment in comments if comments else []:
 		comment_dict = comment.to_dict()
+		# 借助评论字典帮助携带is_like键值对信息,is_like为True表示已点赞
+		comment_dict['is_like'] = False
+
+		# 如果当前评论的id在点赞的评论id列表里,则将标志位修改为True
+		if comment.id in commentlike_id_list:
+			comment_dict['is_like'] = True
+
 		comment_dict_list.append(comment_dict)
 
 	# 组织响应数据字典
