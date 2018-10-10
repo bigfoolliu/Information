@@ -33,13 +33,14 @@ $(function(){
             },
             data: JSON.stringify(params),
             success: function (resp) {
-                if (resp.errno == '0'){
+
+                if (resp.erron == '0') {
+
                     // 收藏成功
-                    // 隐藏收藏按钮
-                    $('.collection').hide();
-                    // 显示已收藏按钮
+                    // 隐藏收藏按钮,显示已收藏按钮
                     $('.collected').show();
-                }else if (resp.errno == '4101'){
+                    $('.collection').hide()
+                }else if (resp.erron == '4101') {
                     // 用户未登录
                     $('.login_form_con').show();
                 }else {
@@ -71,14 +72,17 @@ $(function(){
                 'X-CSRFToken': getCookie('csrf_token')
             },
             data: JSON.stringify(params),
-            success: function (resp) {
-                if (resp.errno == '0'){
+            // 回调函数
+            success: function(resp) {
+
+                if(resp.erron == '0'){
+
                     // 取消收藏成功
                     // 显示收藏按钮
                     $('.collection').show();
                     // 隐藏已收藏按钮
                     $('.collected').hide();
-                }else if (resp.errno == '4101'){
+                }else if(resp.erron == '4101'){
                     // 用户未登录
                     $('.login_form_con').show();
                 }else {

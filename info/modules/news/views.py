@@ -137,9 +137,9 @@ def news_collect():
 	try:
 		db.session.commit()
 	except Exception as e:
-		db.session.rollback()  # 注意: 数据库提交异常的回滚操作
 		current_app.logger.error(e)
-		return jsonify(erron=RET.DBERR, errmsg='数据库保存新闻列表数据异常')
+		db.session.rollback()  # 注意: 数据库提交异常的回滚操作
+		return jsonify(erron=RET.DBERR, errmsg='数据库保存新闻列表数据异常...')
 
 	# 返回值
 	return jsonify(erron=RET.OK, errmsg='OK')

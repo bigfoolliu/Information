@@ -204,7 +204,7 @@ $(function(){
             },
             success: function(resp) {
                 // 回调函数,即当响应成功之后执行
-                if(resp.errno == '0'){
+                if(resp.erron == '0'){
                     // 注册成功,刷新页面从而将表单隐藏
                     window.location.reload()
                 }else{
@@ -274,7 +274,7 @@ function sendSMSCode() {
          },
         success:function (resp) {
             //发送短信成功的回调函数,参数resp为前端自定义
-            if (resp.errno == 0){
+            if (resp.erron == '0'){
                 //发送短信成功,倒计时成功60秒
                 var num = 60;
                 //设置一个计时器
@@ -300,7 +300,7 @@ function sendSMSCode() {
                 //将点击按钮的onclick恢复
                 $('.get_code').attr('onclick', 'sendSMSCode();');
 
-                if (resp.errno == '4004'){
+                if (resp.erron == '4004'){
                     //验证码填写错误,需要重新填写
                     //调用图片生成图片的方法,重新生成一张新的图片
                     generateImageCode()
@@ -359,7 +359,7 @@ function login_out() {
             'X-CSRFToken': getCookie('csrf_token')
         },
         success: function (resp) {
-            if (resp.errno == '0'){
+            if (resp.erron == '0'){
                 // 返回成功,刷新页面
                 location.reload()
             }else{
