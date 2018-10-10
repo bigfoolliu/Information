@@ -12,15 +12,79 @@
 from flask import render_template, g, current_app, jsonify, request
 
 from info import constants, db
-from info.models import News
+from info.models import News, Comment
 from info.modules.news import news_bp
 from info.utils.common import user_login_data
 
-
-# 访问接口: 127.0.0.1:5000/news/23
 from info.utils.response_code import RET
 
 
+# 访问接口: 127.0.0.1:5000/news/news_comment
+@news_bp.route('/news_comment', methods=['POST'])
+@user_login_data
+def news_comment():
+	"""
+	用户评论后端接口
+	业务逻辑:
+		1. 根据news_id查询当前的新闻
+		2. parent_id没有值: 创建主评论模型并赋值
+		3. parent_id有值: 创建子评论模型并赋值
+		4. 将评论模型保存至数据库
+		5. 返回响应数据
+	:return:
+	"""
+	# 获取参数
+	params_dict = request.json
+	news_id = params_dict.get('news_id')  # 被评论新闻的id
+	comment_str = params_dict.get('comment')  # 评论内容
+	parent_id = params_dict.get('parent_id')  # 子评论的父评论id(非必传,取决于评论类型)
+
+	# 获取用户登录信息
+	user = g.user
+
+	if not all([news_id, comment_str]):
+		return jsonify(erron=RET.PARAMERR, errmsg='参数不足')
+
+	# 用户未登录
+	if not user:
+		return jsonify(erron=RET.SESSIONERR, errmsg='用户未登录')
+
+	# 根据news_id查询当前新闻
+	try:
+		news = News.query.get(news_id)
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='数据库查询新闻异常')
+
+	if not news:
+		return jsonify(erron=RET.NODATA, errmsg='新闻不存在')
+
+	# 构建评论模型并赋值
+	comment_obj = Comment()
+	comment_obj.news_id = news_id
+	comment_obj.user_id = user.id
+	comment_obj.content = comment_str
+
+	# 如果是子评论则添加parent_id
+	if parent_id:
+		comment_obj.parent_id = parent_id
+
+	# 将评论对象添加至数据库
+	try:
+		db.session.add(comment_obj)
+		db.session.commit()
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='数据库保存评论异常')
+
+	# 组织响应数据
+	data = comment_obj.to_dict()
+
+	# 返回值
+	return jsonify(erron=RET.OK, errmsg='发布评论成功', data=data)
+
+
+# 访问接口: 127.0.0.1:5000/news/23
 @news_bp.route('/<int:news_id>')
 @user_login_data  # 使用装饰器,从而可以直接获取到其中的用户登录的消息
 def news_detail(news_id):
@@ -68,12 +132,28 @@ def news_detail(news_id):
 		if news in user.collection_news:
 			is_collected = True
 
+	# -----------------------查询新闻评论列表数据----------------------------------
+	try:
+		# 查询到当前新闻的所有的评论,并将其按创建时间的倒序排列
+		comments = Comment.query.filter(Comment.news_id == news_id).order_by(Comment.create_time.desc()).all()
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='数据库查询评论列表失败')
+
+	# 对象列表转换为字典列表
+	comment_dict_list = []
+
+	for comment in comments if comments else []:
+		comment_dict = comment.to_dict()
+		comment_dict_list.append(comment_dict)
+
 	# 组织响应数据字典
 	data = {
 		'user_info': user.to_dict() if user else None,
 		'news_rank_list': news_rank_dict_list,
 		'news': news_dict,
-		'is_collected': is_collected
+		'is_collected': is_collected,
+		'comments': comment_dict_list
 	}
 
 	return render_template('news/detail.html', data=data)
