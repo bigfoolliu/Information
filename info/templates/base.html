@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block titleBlock %}
-        首页-新经资讯
-    {% endblock %}</title>
+    <title>
+        {% block titleBlock %}
+            首页-新经资讯
+        {% endblock %}
+    </title>
     <link rel="stylesheet" type="text/css" href="../static/news/css/reset.css">
     <link rel="stylesheet" type="text/css" href="../static/news/css/main.css">
     <script type="text/javascript" src="../static/news/js/jquery-1.12.4.min.js"></script>
@@ -19,7 +21,8 @@
 <body>
     <div class="header_con">
         <div class="header">
-            <a href="#" class="logo fl"><img src="../static/news/images/logo.png" alt="logo"></a>
+            {# 点击logo回到主页 #}
+            <a href="/" class="logo fl"><img src="../static/news/images/logo.png" alt="logo"></a>
 
 
             {# 文章分类块 #}
@@ -33,8 +36,9 @@
                 {# 用户登录成功 #}
                     <!-- 用户登录后显示下面，隐藏上面 -->
                 <div class="user_login fr">
-                    <img src="{% if data.user_info.avatar_url %}{{ data.user_info.avatar.rul }}{% else %}../../static/news/images/person01.png{% endif %}" class="lgin_pic">
-                    <a href="#">{{ data.user_info.nick_name }}</a>
+                    <img src="{% if data.user_info.avatar_url %}{{ data.user_info.avatar_url }}{% else %}../../static/news/images/person01.png{% endif %}" class="lgin_pic">
+                    {# 点击用户的昵称可以进入其用户的个人中心 #}
+                    <a href="/user/info">{{ data.user_info.nick_name }}</a>
                     <a href="javascript:;" onclick="login_out()">退出</a>
                 </div>
 

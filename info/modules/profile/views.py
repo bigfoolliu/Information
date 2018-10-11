@@ -11,15 +11,73 @@ info/modules/profile/views.py
 """
 from flask import g, render_template, request, jsonify, session, current_app
 
-from info import db
+from info import db, constants
 from info.modules.profile import profile_bp
 from info.utils.common import user_login_data
+from info.utils.pic_storage import pic_storage
 
-
-# 127.0.0.1:5000/user/info
 from info.utils.response_code import RET
 
 
+# 127.0.0.1:5000/user/pic_info
+@profile_bp.route('/pic_info', methods=['GET', 'POST'])
+@user_login_data
+def pic_info():
+	"""
+	上传用户头像
+	:return:
+	"""
+	user = g.user
+
+	# 为get请求时
+	if request.method == 'GET':
+		return render_template('profile/user_pic_info.html')
+
+	# 为post请求时
+	"""
+	1. 获取参数
+		avatar, user
+	2. 校验参数
+	3. 逻辑处理
+		借助七牛云,将二进制图片数据上传
+		将返回的图片url保存至用户对象
+		完整的图片url返回至前端
+	4. 返回值
+	"""
+	# 获取用户上传的图片数据
+	try:
+		pic_data = request.files.get('avatar').read()
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.PARAMERR, errmsg='获取图片异常')
+
+	# 将图片上传至七牛云
+	try:
+		pic_name = pic_storage(pic_data)  # 返回值为七牛云为图片创建的一个名称
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.THIRDERR, errmsg='七牛云上传图片失败')
+
+	# 将图片的url保存至用户对象(此处为相对路径,在后面拼接完整路径)
+	user.avatar_url = pic_name
+	try:
+		db.session.commit()
+	except Exception as e:
+		current_app.logger.error(e)
+		db.session.rollback()
+		return jsonify(erron=RET.DBERR, errmsg='数据库存储照片信息异常')
+
+	# 创建完整的头像url并传给前端
+	full_url = constants.QINIU_DOMIN_PREFIX + pic_name
+	# 组织返回数据
+	data = {
+		'avatar_url': full_url
+	}
+	# 返回值
+	return jsonify(erron=RET.OK, errmsg='上传头像成功', data=data)
+
+
+# 127.0.0.1:5000/user/info
 @profile_bp.route('/base_info', methods=['GET', 'POST'])
 @user_login_data
 def user_base_info():

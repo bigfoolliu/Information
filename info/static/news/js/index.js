@@ -48,8 +48,6 @@ $(function () {
         if ((canScrollHeight - nowScroll) < 100) {
             // TODO 判断页数，去更新新闻数据
 
-            console.log('距离不足100');  // TODO: 测试
-
             // 当需要加载数据时
             if (!data_querying) {
                 // 如果当前页面数还没有到达总页数则加载新的页面
