@@ -19,6 +19,46 @@ from info.utils.pic_storage import pic_storage
 from info.utils.response_code import RET
 
 
+# 127.0.0.1:5000/user/pass_info
+@profile_bp.route('/pass_info', methods=['GET', 'POST'])
+@user_login_data
+def pass_info():
+	"""
+	更改用户原始密码
+	:return:
+	"""
+	user = g.user
+	if request.method == 'GET':
+		return render_template('profile/user_pass_info.html')
+
+	# post请求修改用户密码接口
+	old_password = request.json.get('old_password')
+	new_password = request.json.get('new_password')
+
+	# 参数校验
+	if not all([old_password, new_password]):
+		return jsonify(erron=RET.PARAMERR, errmsg='参数不足')
+
+	if not user:
+		return jsonify(erron=RET.SESSIONERR, errmsg='用户未登录')
+	# 校验旧密码是否正确
+	if not user.check_password(old_password):
+		return jsonify(erron=RET.DATAERR, errmsg='原始密码输入错误')
+
+	# 将新密码赋值到user对象
+	user.password = new_password
+	# 保存数据至数据库
+	try:
+		db.session.commit()
+	except Exception as e:
+		current_app.logger.error(e)
+		db.session.rollback()
+		return jsonify(erron=RET.DBERR, errmsg='数据库保存密码异常')
+
+	# 返回值
+	return jsonify(erron=RET.OK, errmsg='密码修改成功')
+
+
 # 127.0.0.1:5000/user/pic_info
 @profile_bp.route('/pic_info', methods=['GET', 'POST'])
 @user_login_data
