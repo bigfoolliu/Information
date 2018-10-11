@@ -241,18 +241,20 @@ def news_detail(news_id):
 	# 查询出当前新闻的所有评论,取得所有评论的id
 	comment_id_list = [comment.id for comment in comments]
 
-	# 通过评论点赞模型查询当前用户点赞了哪几条评论
-	try:
-		commentlike_model_list = CommentLike.query.filter(
-			CommentLike.user_id == user.id,
-			CommentLike.comment_id.in_(comment_id_list)  # TODO: 注意此处的in_
-		).all()
-	except Exception as e:
-		current_app.logger.error(e)
-		return jsonify(erron=RET.DBERR, errmsg='数据库查询评论点赞列表数据异常')
+	# 通过评论点赞模型查询当前用户点赞了哪几条评论,但前提是用户已经登录
+	commentlike_id_list = []
+	if user:
+		try:
+			commentlike_model_list = CommentLike.query.filter(
+				CommentLike.user_id == user.id,
+				CommentLike.comment_id.in_(comment_id_list)  # TODO: 注意此处的in_
+			).all()
+		except Exception as e:
+			current_app.logger.error(e)
+			return jsonify(erron=RET.DBERR, errmsg='数据库查询评论点赞列表数据异常')
 
-	# 遍历上一步的评论点赞模型列表,获取所有点赞过的评论id
-	commentlike_id_list = [commentlike_model.comment_id for commentlike_model in commentlike_model_list]
+		# 遍历上一步的评论点赞模型列表,获取所有点赞过的评论id
+		commentlike_id_list = [commentlike_model.comment_id for commentlike_model in commentlike_model_list]
 
 	# 对象列表转换为字典列表
 	comment_dict_list = []

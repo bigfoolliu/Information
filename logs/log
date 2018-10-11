@@ -5488,3 +5488,77 @@ INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:02:35] "GET /news_list?page=1
 INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:02:40] "GET /user/pass_info HTTP/1.1" 200 -
 INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:02:52] "POST /user/pass_info HTTP/1.1" 200 -
 INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:02:54] "GET /user/pass_info HTTP/1.1" 200 -
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 161-212-188
+INFO _internal.py:88  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:04:04] "GET /user/info HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:04:05] "GET /user/base_info HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:04:05] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:04:07] "GET / HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:04:07] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:04:07] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:04:10] "POST /passport/login_out HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:04:10] "GET / HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:04:10] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:04:10] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+ERROR views.py:251 'NoneType' object has no attribute 'id'
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:04:12] "GET /news/151 HTTP/1.1" 200 -
+ERROR views.py:251 'NoneType' object has no attribute 'id'
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:05:02] "GET /news/151 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:05:02] "GET /favicon.ico HTTP/1.1" 200 -
+ERROR views.py:251 'NoneType' object has no attribute 'id'
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:05:16] "GET /news/151 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:05:17] "GET /favicon.ico HTTP/1.1" 200 -
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 161-212-188
+INFO _internal.py:88  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:27] "GET /news/151 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:27] "GET /static/news/js/detail.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:27] "GET /static/news/images/focus_icons.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:27] "GET /static/news/images/reply_icon.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:27] "GET /static/news/images/zan_icon.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:27] "GET /static/news/images/collect_icons.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:27] "GET /static/news/images/comment_icon.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:28] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:32] "GET /news_list?page=2&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:34] "GET /news_list?page=3&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:38] "GET /news/3 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:38] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:42] "GET /news_list?page=2&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:43] "GET /news_list?page=3&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:49] "GET /news/4 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:49] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:51] "GET /news_list?page=2&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:12:52] "GET /news_list?page=3&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:14] "POST /passport/login HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:14] "GET /news/4 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:14] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:16] "GET /news_list?page=2&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:17] "POST /news/news_collect HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:21] "POST /news/news_comment HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:22] "GET /news_list?page=3&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:22] "GET /news_list?page=4&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:29] "POST /news/news_comment HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:30] "GET /news_list?page=5&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:34] "POST /news/news_comment HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:35] "GET /news_list?page=6&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:42] "POST /news/news_comment HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:43] "GET /news_list?page=7&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:46] "GET /news/4 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:46] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:46] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:47] "GET /favicon.ico HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:48] "POST /news/comment_like HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:50] "POST /news/comment_like HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:51] "POST /news/comment_like HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:53] "POST /news/comment_like HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:55] "GET /news/4 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:55] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:55] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:55] "GET /favicon.ico HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:13:56] "GET /news_list?page=3&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:14:00] "POST /passport/login_out HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:14:00] "GET /news/4 HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [11/Oct/2018 21:14:01] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
