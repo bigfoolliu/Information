@@ -13,24 +13,27 @@
     <div class="my_collect">
         <h3>我的收藏</h3>
         <ul class="article_list">
-            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
-            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
-            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
-            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
-            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
-            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><span>2018-1-17</span></li>
+
+            {# 遍历并展示所有该用户收藏的所有新闻 #}
+            {% for news in data.collections %}
+                <li><a href="/news/{{ news.id }}" target="_blank">{{ news.title }}</a><span>{{ news.create_time }}</span></li>
+            {% endfor %}
+
         </ul>
 
 
 
         <div id="pagination" class="page"></div>
+
+        {# 短小的脚本写在这里 #}
         <script>
             $(function() {
                 $("#pagination").pagination({
-                    currentPage: 2,
-                    totalPage: 3,
+                    currentPage: {{ data.current_page }},
+                    totalPage: {{ data.total_page }},
                     callback: function(current) {
-                        alert('ok!');
+                        // 组织请求的url进行分页数据的获取
+                        window.location.href = '/user/collection?p=' + current
                     }
                 });
             });

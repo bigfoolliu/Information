@@ -19,6 +19,59 @@ from info.utils.pic_storage import pic_storage
 from info.utils.response_code import RET
 
 
+# 127.0.0.1:5000/user/collection?p=页码
+@profile_bp.route('/collection')
+@user_login_data
+def user_collection_news():
+	"""
+	获取当前用户新闻的收藏列表
+	:return:
+	"""
+	user = g.user
+	p = request.args.get('p', 1)  # 页码,默认设置为1
+
+	# 参数类型判断
+	try:
+		p = int(p)
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.PARAMERR, errmsg='参数类型错误')
+
+	# 查询用户收藏的新闻列表
+	news_collections = []
+	current_page = 1
+	total_page = 1
+
+	if user:
+		try:
+			# TODO: paginate需要加深了解
+			paginate = user.collection_news.paginate(p, constants.USER_COLLECTION_MAX_NEWS, False)
+			# 当前页码所有数据
+			news_collections = paginate.items
+			# 总页数
+			total_page = paginate.pages
+			# 当前页码
+			current_page = paginate.page
+		except Exception as e:
+			current_app.logger.error(e)
+			return jsonify(erron=RET.DBERR, errmsg='数据库查询收藏新闻分页数据异常')
+
+	# 对象列表转字典列表
+	news_dict_collections = []
+	for news in news_collections if news_collections else []:
+		news_dict_collections.append(news.to_basic_dict())
+
+	# 组织响应数据
+	data = {
+		'collections': news_dict_collections,
+		'current_page': current_page,
+		'total_page': total_page
+	}
+
+	# 返回值
+	return render_template('profile/user_collection.html', data=data)
+
+
 # 127.0.0.1:5000/user/pass_info
 @profile_bp.route('/pass_info', methods=['GET', 'POST'])
 @user_login_data
