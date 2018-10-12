@@ -59,8 +59,7 @@ def news_list():
 	# 将对象列表转成字典列表
 	news_dict_list = []
 	for news in news_list1 if news_list1 else []:
-		news_dict = news.to_basic_dict()
-		news_dict_list.append(news_dict)
+		news_dict_list.append(news.to_review_dict())
 
 	# 组织响应数据
 	data = {

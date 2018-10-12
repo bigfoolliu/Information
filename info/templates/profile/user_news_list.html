@@ -16,24 +16,21 @@
 
             {# 根据新闻审核的情况来有不同的显示 #}
             {% for news in data.news_list %}
-
-                {% if news.status == 0 %}
-                     {# 审核通过 #}
-                    <li><a href="/news/{{ news.id }}">{{ news.title }}</a><em class="pass">已通过</em><span>{{ news.create_time }}</span></li>
-
-                {% elif news.status == 1 %}
-                    {# 审核中 #}
-                    <li><a href="javascript:;">{{ news.title }}</a><em class="review">审核中</em><span>{{ news.create_time }}</span></li>
-
-                {% else %}
-                    {# 审核未通过 #}
-                    <li>
-                        <a href="javascript:;">{{ news.title }}</a><em class="nopass">未通过</em><span>{{ news.create_time }}</span>
-                        <b>未通过原因：{{ news.reason }}</b>
-                    </li>
-                {% endif %}
-
-            {% endfor %}
+            <li>
+            {% if news.status == 0 %}
+                {# 审核通过 #}
+                alert("1111111")
+                <a href="/news/{{ news.id }}">{{ news.title }}</a><em class="pass">已通过</em><span>{{ news.create_time }}</span>
+            {% elif news.status == 1 %}
+                {# 审核中 #}
+                <a href="javascript:;">{{ news.title }}</a><em class="review">审核中</em><span>{{ news.create_time }}</span>
+            {% else %}
+                {# 审核不通过 #}
+                <a href="javascript:;">{{ news.title }}</a><em class="nopass">未通过</em><span>{{ news.create_time }}</span>
+                <b>未通过原因：{{ news.reason }}</b>
+            {% endif %}
+            </li>
+        {% endfor %}
 
         </ul>
 
