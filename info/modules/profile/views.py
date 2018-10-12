@@ -20,6 +20,59 @@ from info.utils.pic_storage import pic_storage
 from info.utils.response_code import RET
 
 
+# 127.0.0.1:5000/user/news_list
+@profile_bp.route('/news_list')
+@user_login_data
+def news_list():
+	"""
+	用户中心展示该用户发布的新闻的后端接口
+	:return:
+	"""
+	user = g.user
+	p = request.args.get('p', 1)  # 页码,默认设置为1
+
+	# 参数类型判断
+	try:
+		p = int(p)
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.PARAMERR, errmsg='参数内容错误')
+
+	# 当前用户存在的时候则采取查询
+	news_list1 = []
+	current_page = 1
+	total_page = 1
+	if user:
+		try:
+			# 创建一个数据库分页对象
+			paginate = News.query.filter(News.user_id == user.id).paginate(p, constants.OTHER_NEWS_PAGE_MAX_COUNT, False)
+			# 获取当前页码的所有数据
+			news_list1 = paginate.items
+			# 当前页码
+			current_page = paginate.page
+			# 总的页码
+			total_page = paginate.pages
+		except Exception as e:
+			current_app.logger.error(e)
+			return jsonify(erron=RET.DBERR, errmsg='数据库查询分页数据失败')
+
+	# 将对象列表转成字典列表
+	news_dict_list = []
+	for news in news_list1 if news_list1 else []:
+		news_dict = news.to_basic_dict()
+		news_dict_list.append(news_dict)
+
+	# 组织响应数据
+	data = {
+		'news_list': news_dict_list,
+		'current_page': current_page,
+		'total_page': total_page
+	}
+
+	# 返回值
+	return render_template('profile/user_news_list.html', data=data)
+
+
 # 127.0.0.1:5000/user/news_release
 @profile_bp.route('/news_release', methods=['GET', 'POST'])
 @user_login_data
@@ -92,7 +145,7 @@ def news_release():
 	"""
 	新闻状态(status)
 	0: 审核通过
-	1: 审核中
+	1: 审核中,默认的状态
 	"""
 	news.status = 1
 

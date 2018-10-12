@@ -36,7 +36,7 @@ $(function () {
                 // 新闻提交成功
                 if(resp.erron == '0'){
                     // 选中索引为6的左边菜单
-                    window.parent.fuChangeMenu(6)
+                    window.parent.fuChangeMenu(6);
                     // 滚动到顶部
                     window.parent.scrollTo(0, 0)
                 }else{

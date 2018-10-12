@@ -13,34 +13,44 @@
     <div class="news_list">
         <h3>新闻列表</h3>
         <ul class="article_list">
-            <li><a href="user_news_release.html">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><em class="pass">已通过</em><span>2018-1-17</span></li>
-            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><em class="pass">已通过</em><span>2018-1-17</span></li>
-            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><em class="review">审核中</em><span>2018-1-17</span></li>
-            <li><a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a><em class="review">审核中</em><span>2018-1-17</span></li>
-            <li>
-                <a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a>
-                <em class="nopass">未通过</em>
-                <span>2018-1-17</span>
-                <b>未通过原因：因为写的太boring,因为写的太boring,因为写的太boring,因为写的太boring,</b>
-            </li>
-            <li>
-                <a href="#">智能音箱“不智能”：这次轮到三星语音助手Bixby被吐槽了</a>
-                <em class="nopass">未通过</em>
-                <span>2018-1-17</span>
-                <b>未通过原因：因为写的太煽情,因为写的太煽情,因为写的太煽情,因为写的太煽情,</b>
-            </li>
+
+            {# 根据新闻审核的情况来有不同的显示 #}
+            {% for news in data.news_list %}
+
+                {% if news.status == 0 %}
+                     {# 审核通过 #}
+                    <li><a href="/news/{{ news.id }}">{{ news.title }}</a><em class="pass">已通过</em><span>{{ news.create_time }}</span></li>
+
+                {% elif news.status == 1 %}
+                    {# 审核中 #}
+                    <li><a href="javascript:;">{{ news.title }}</a><em class="review">审核中</em><span>{{ news.create_time }}</span></li>
+
+                {% else %}
+                    {# 审核未通过 #}
+                    <li>
+                        <a href="javascript:;">{{ news.title }}</a><em class="nopass">未通过</em><span>{{ news.create_time }}</span>
+                        <b>未通过原因：{{ news.reason }}</b>
+                    </li>
+                {% endif %}
+
+            {% endfor %}
+
         </ul>
+
         <div id="pagination" class="page"></div>
+
         <script>
             // 调用父页面的方法改变菜单指示
             // window.parent.fnChangeMenu(2);
 
+            // 点击分页呈现不同的效果
             $(function(){
                 $("#pagination").pagination({
-                    currentPage: 2,
-                    totalPage: 3,
+                    currentPage: {{ data.current_page }},
+                    totalPage: {{ data.total_page }},
                     callback: function(current) {
-                        alert('ok!');
+                        // 分页查询
+                        window.location.href = '/user/news_list?p=' + current
                     }
                 });
             });

@@ -112,6 +112,7 @@ per_page	int		否			每页多少条数据，如果不传，默认10条
 def get_news_list():
 	"""
 	新闻列表的后端接口
+	在不同的分类标签下展示该分类的所有新闻
 	:return:
 	"""
 	# 获取参数
@@ -124,8 +125,8 @@ def get_news_list():
 	if not cid:
 		return jsonify(erron=RET.PARAMERR, errmsg='参数cid不存在')
 
+	# 数据类型转换
 	try:
-		# 数据类型转换
 		cid = int(cid)
 		page = int(page)
 		per_page = int(per_page)
@@ -134,7 +135,8 @@ def get_news_list():
 		return jsonify(erron=RET.PARAMERR, errmsg='参数内容格式错误')
 
 	# 查询数据并分页
-	filters = []
+	"""条件列表,默认条件为该新闻必须审核通过"""
+	filters = [News.status == 0]
 	# 如果分类id不为1,添加分类id的过滤
 	if cid != 1:
 		# == 在sqlalchemy底层有重写__eq__方法，改变了该返回值，返回是一个查询条件
