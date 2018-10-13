@@ -20,6 +20,51 @@ from info.utils.pic_storage import pic_storage
 from info.utils.response_code import RET
 
 
+# 127.0.0.1:5000/user/user_follow
+@profile_bp.route('/user_follow')
+@user_login_data
+def user_follow():
+	"""
+	用户关注后端接口
+	:return:
+	"""
+	# 获取页数
+	p = request.args.get('p', 1)
+	try:
+		p = int(p)
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.PARAMERR, errmsg='参数类型错误')
+
+	# 获取参数
+	user = g.user
+	follows = []
+	current_page = 1
+	total_page = 1
+
+	# 数据库中查找当前用户的所有关注者
+	try:
+		paginate = user.followed.paginate(p, constants.USER_FOLLOWED_MAX_COUNT, False)
+		current_page = paginate.page
+		total_page = paginate.pages
+	except Exception as e:
+		current_page.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='数据库查询分页数据错误')
+
+	user_dict_list = []
+	for follow_user in follows:
+		user_dict_list.append(follow_user.to_dict())
+
+	# 组织响应数据
+	data = {
+		'users': user_dict_list,
+		'total_page': total_page,
+		'current_page': current_page
+	}
+
+	# 返回值
+	return render_template('profile/user_follow.html', data=data)
+
 # 127.0.0.1:5000/user/news_list
 @profile_bp.route('/news_list')
 @user_login_data

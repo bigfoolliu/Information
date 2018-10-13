@@ -12,7 +12,7 @@
 from flask import render_template, g, current_app, jsonify, request
 
 from info import constants, db
-from info.models import News, Comment, CommentLike
+from info.models import News, Comment, CommentLike, User
 from info.modules.news import news_bp
 from info.utils.common import user_login_data
 
@@ -221,13 +221,28 @@ def news_detail(news_id):
 	# 每浏览一次该新闻则浏览量加1(因为配置文件中的SQLALCHEMY_COMMIT_ON_TEARDOWN = True 配置)
 	news.clicks += 1
 
-	# -----------------------查询当前用户是否收藏当前新闻---------------------------
+	# -----------------------查询当前用户是否收藏当前新闻及关注新闻作者---------------------------
 	is_collected = False
+	# 标识当前登录用户是否已关注新闻作者
+	is_followed = False
 	# 若当前用户已登录
 	if user:
 		# 当前新闻在用户的新闻收藏列表里则说明已经收藏
 		if news in user.collection_news:
 			is_collected = True
+
+	# 查询用户是否关注了该作者
+	try:
+		author = User.query.filter(User.id == news.user_id).first()
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='查询新闻作者对象异常')
+
+	# 如果当前用户处于登录状态且当前新闻有作者
+	if user and author:
+		# 判断是否关注
+		if author in user.followed:
+			is_followed = True
 
 	# -----------------------查询新闻评论列表数据----------------------------------
 	try:
@@ -276,6 +291,7 @@ def news_detail(news_id):
 		'news_rank_list': news_rank_dict_list,
 		'news': news_dict,
 		'is_collected': is_collected,
+		'is_followed': is_followed,
 		'comments': comment_dict_list
 	}
 
