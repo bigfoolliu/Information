@@ -19,7 +19,6 @@
             <li>
             {% if news.status == 0 %}
                 {# 审核通过 #}
-                alert("1111111")
                 <a href="/news/{{ news.id }}">{{ news.title }}</a><em class="pass">已通过</em><span>{{ news.create_time }}</span>
             {% elif news.status == 1 %}
                 {# 审核中 #}

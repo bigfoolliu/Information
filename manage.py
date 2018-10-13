@@ -62,6 +62,9 @@ manager.add_command('db', MigrateCommand)
 """
 
 
+# 用装饰器的方式来给manager添加特定的参数
+@manager.option('-n', '--name', dest='name')
+@manager.option('-p', '--password', dest='password')
 def createsuperuser(name, password):
 	"""
 	创建管理员用户对象
@@ -76,7 +79,7 @@ def createsuperuser(name, password):
 	admin_user.nick_name = name
 	admin_user.mobile = name
 	admin_user.password = password
-	# 添加一个额外得属性,设置为管理员
+	# 添加一个额外的属性,设置为管理员
 	admin_user.is_admin = True
 
 	# 将该管理员保存至数据库
@@ -88,8 +91,15 @@ def createsuperuser(name, password):
 		db.session.rollback()
 		return jsonify(erron=RET.DBERR, errmsg='数据库存储管理员用户异常')
 
+	# TODO: 测试
+	admin_user_dict = {
+		'nick_name': admin_user.nick_name,
+		'mobile': admin_user.mobile,
+		'is_admin': admin_user.is_admin
+	}
+
 	# 成功
-	return '创建管理员账户成功'
+	return '创建管理员账户成功', admin_user_dict
 
 
 if __name__ == '__main__':
