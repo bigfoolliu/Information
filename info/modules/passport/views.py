@@ -385,7 +385,10 @@ def login():
 def login_out():
 	"""退出登录后台接口"""
 	# 直接将用户的会话信息删除
-	session.pop('user_id')
-	session.pop('mobile')
-	session.pop('nick_name')
+	# 管理员账户的信息删除
+	session.pop('user_id', None)
+	session.pop('mobile', None)
+	session.pop('nick_name', None)
+	session.pop('is_admin', None)
+
 	return jsonify(erron=RET.OK, errmsg='退出登录成功')

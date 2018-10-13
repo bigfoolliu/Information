@@ -25,7 +25,7 @@ def admin_login():
 	if request.method == 'GET':
 		# 判断当前用户是否有登录,如果管理员有登录直接进入管理员首页
 		user_id = session.get('user_id')
-		is_admin = session.get('is_admin')
+		is_admin = session.get('is_admin', False)
 		if user_id and is_admin:
 			return redirect(url_for('admin.admin_index'))
 		else:
