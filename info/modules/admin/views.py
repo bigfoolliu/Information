@@ -9,7 +9,7 @@ info/modules/admin/views.py
 """
 import datetime
 import time
-from flask import request, render_template, session, redirect, url_for, current_app, g, jsonify
+from flask import request, render_template, session, redirect, url_for, current_app, g, jsonify, abort
 
 from info import db, constants
 from info.models import User, News
@@ -22,13 +22,77 @@ from info.utils.response_code import RET
 
 
 # 127.0.0.1:5000/admin/news_review_detail?news_id=新闻id
-@admin_bp.route('/news_review_detail')
+@admin_bp.route('/news_review_detail', methods=['GET', 'POST'])
 def news_review_detail():
 	"""
 	新闻审核细节后端接口
 	:return:
 	"""
-	return render_template('admin/news_review_detail.html')
+	# 请求方式为get则显示待审核新闻详情
+	if request.method == 'GET':
+		news_id = request.args.get('news_id')
+		if not news_id:
+			return Exception('参数不足')
+
+		try:
+			news = News.query.get(news_id)
+		except Exception as e:
+			current_app.logger.error(e)
+			return jsonify(erron=RET.DBERR, errmsg='数据库查询新闻对象异常')
+
+		if not news:
+			abort(404)
+
+		# 对象转字典
+		news_dict = news.to_dict() if news else None
+
+		data = {
+			'news': news_dict
+		}
+		return render_template('admin/news_review_detail.html', data=data)
+
+	# post请求审核新闻
+	params_dict = request.json
+	news_id = params_dict.get('news_id')
+	action = params_dict.get('action')  # 审核通过还是不通过
+
+	if not all([news_id, action]):
+		return jsonify(erron=RET.PARAMERR, errmsg='参数不足')
+
+	if action not in ['accept', 'reject']:
+		return jsonify(erron=RET.PARAMERR, errmsg='action参数错误')
+
+	# 根据新闻id查询新闻对象
+	try:
+		news = News.query.get(news_id)
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='查询新闻对象错误')
+
+	if not news:
+		return jsonify(erron=RET.NODATA, errmsg='没有新闻对象')
+
+	# 新闻是否审核通过逻辑
+	if action == 'accept':
+		news.status = 0
+	else:
+		reason = request.json.get('reason')
+		if reason:
+			news.status = 1
+			news.reason = reason
+		else:
+			return jsonify(erron=RET.PARAMERR, errmsg='需要填写审核不通过原因')
+
+	# 将新闻对象重新保存回数据库
+	try:
+		db.session.commit()
+	except Exception as e:
+		current_app.logger.error(e)
+		db.session.rollback()
+		return jsonify(erron=RET.DBERR, errmsg='数据库存储新闻对象异常')
+
+	# 返回值
+	return jsonify(erron=RET.OK, errmsg='OK')
 
 
 # 127.0.0.1:5000/admin/news_review?p=页码
@@ -151,7 +215,8 @@ def user_count():
 	# 查询日新增数: 获取到当日0点0分0秒时间对象，然后查询最后一次登录比其大的所有数据
 	day_count = 0
 	try:
-		day_begin = '%d-%02d-%02d' % (now.tm_year, now.tm_mon, now.tm_day)
+		now = time.localtime()
+		day_begin = '%d-%02d-%02d' % (now.tm_year, now.tm_mon, now.tm_mday)
 		day_begin_date = datetime.datetime.strptime(day_begin, '%Y-%m-%d')  # 将时间字符串转换为时间格式
 		day_count = User.query.filter(User.is_admin == False, User.create_time >= day_begin_date).count()
 	except Exception as e:
@@ -265,11 +330,7 @@ def admin_index():
 	后台管理首页
 	:return:
 	"""
-	user = g.user  # 注意必须要装饰器
-
-	if not user:
-		return redirect(url_for('admin.admin_login'))
-
+	user = g.user
 	data = {
 		'user': user.to_dict()
 	}

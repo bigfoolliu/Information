@@ -35,7 +35,7 @@
 	</div>
 
 	<div class="main_body" id="main_body">
-		<iframe src="user_count.html" frameborder="0" id="main_frame" name="main_frame" frameborder="0" scrolling="auto"></iframe>
+		<iframe src="{{ url_for('admin.user_count') }}" frameborder="0" id="main_frame" name="main_frame" frameborder="0" scrolling="auto"></iframe>
 	</div>
 	
 	<script>
@@ -43,7 +43,7 @@
 			$('.first_menu').click(function(){
 				$(this).addClass('active').siblings('.first_menu').removeClass('active');
 				$(this).next().slideDown().siblings('.sub_menu').slideUp();
-			})
+			});
 			var frame_w = $('#main_body').outerWidth();
 			var frame_h = $('#main_body').outerHeight();
 			$('#main_frame').css({'width':frame_w,'height':frame_h});
