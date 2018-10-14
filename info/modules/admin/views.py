@@ -11,7 +11,7 @@ import datetime
 import time
 from flask import request, render_template, session, redirect, url_for, current_app, g, jsonify
 
-from info import db
+from info import db, constants
 from info.models import User
 from info.modules.admin import admin_bp
 
@@ -19,6 +19,50 @@ from info.utils.common import user_login_data
 
 
 from info.utils.response_code import RET
+
+
+# 127.0.0.1:5000/admin/user_list?p=页码
+@admin_bp.route('/user_list')
+def user_list():
+	"""
+	查询用户列表
+	:return: 
+	"""
+	p = request.args.get('p', 1)
+	try:
+		p = int(p)
+	except Exception as e:
+		current_app.logger.error(e)
+		p = 1
+
+	user_list = []
+	current_page = 1
+	total_page = 1
+
+	try:
+		paginate = User.query.filter(User.is_admin == False).order_by(User.last_login.desc())\
+			.paginate(p, constants.ADMIN_USER_PAGE_MAX_COUNT, False)
+		user_list = paginate.items
+		current_page = paginate.page
+		total_page = paginate.pages
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='数据库查询用户数据异常')
+
+	# 对象列表转字典列表
+	user_dict_list = []
+	for user in user_list if user_list else []:
+		user_dict_list.append(user.to_admin_dict())
+
+	# 组织响应数据
+	data = {
+		'users': user_dict_list,
+		'current_page': current_page,
+		'total_page': total_page
+	}
+
+	# 返回值
+	return render_template('admin/user_list.html', data=data)
 
 
 # 127.0.0.1:5000/admin/user_count
