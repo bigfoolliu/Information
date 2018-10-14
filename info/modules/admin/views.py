@@ -7,7 +7,7 @@
 """
 info/modules/admin/views.py
 """
-from flask import request, render_template, session, redirect, url_for, current_app
+from flask import request, render_template, session, redirect, url_for, current_app, g
 
 from info import db
 from info.models import User
@@ -15,6 +15,9 @@ from info.modules.admin import admin_bp
 
 
 # 127.0.0.1:5000/admin/login
+from info.utils.common import user_login_data
+
+
 @admin_bp.route('/login', methods=['GET', 'POST'])
 def admin_login():
 	"""
@@ -32,7 +35,7 @@ def admin_login():
 			# 不是管理员账户
 			return render_template('admin/login.html')
 
-	# 获取参数
+	# 当为POST请求时,首先获取参数
 	username = request.form.get('username')
 	password = request.form.get('password')
 
@@ -45,8 +48,9 @@ def admin_login():
 		admin_user = User.query.filter(User.mobile == username, User.is_admin == True).first()
 	except Exception as e:
 		current_app.logger.error(e)
+		# 为查询到用户则重新加载该登录页面
 		return render_template('admin/login.html', errmsg='数据库查询管理员账户异常')
-	# 用户不存在
+	# 用户不存在则重新加载该登录页面
 	if not admin_user:
 		return render_template('admin/login.html', errmsg='没有查询到该管理员账户')
 
@@ -74,9 +78,18 @@ def admin_login():
 
 # 127.0.0.1:5000/admin/index
 @admin_bp.route('/index')
+@user_login_data
 def admin_index():
 	"""
 	后台管理首页
 	:return:
 	"""
-	return render_template('admin/index.html')
+	user = g.user  # 注意必须要装饰器
+
+	if not user:
+		return redirect(url_for('admin.admin_login'))
+
+	data = {
+		'user': user.to_dict()
+	}
+	return render_template('admin/index.html', data=data)
