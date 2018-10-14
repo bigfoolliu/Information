@@ -8530,3 +8530,59 @@ INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:06:03] "GET /static/admin/ima
 INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:06:03] "GET /static/admin/html/user_count.html HTTP/1.1" 200 -
 INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:06:03] "GET /static/admin/images/icons.png HTTP/1.1" 200 -
 INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:06:04] "GET /static/admin/js/echarts.min.js HTTP/1.1" 200 -
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 161-212-188
+INFO _internal.py:88  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /admin/index HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/admin/css/reset.css HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/admin/css/main.css HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/admin/js/jquery-1.12.4.min.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/admin/images/logo.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/admin/images/person.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /admin/user_count.html HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/admin/images/icons.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/news/css/reset.css HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/news/css/main.css HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/news/js/jquery-1.12.4.min.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/news/js/main.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/news/js/index.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/news/images/logo.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/news/images/person01.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/news/images/not_found.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /static/news/images/pic_code.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:51:49] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+INFO _internal.py:88  * Restarting with stat
+WARNING _internal.py:88  * Debugger is active!
+INFO _internal.py:88  * Debugger PIN: 161-212-188
+INFO _internal.py:88  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /admin/index HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/admin/css/reset.css HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/admin/css/main.css HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/admin/js/jquery-1.12.4.min.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/admin/images/logo.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/admin/images/person.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /admin/user_count.html HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/admin/images/icons.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/news/css/reset.css HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/news/css/main.css HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/news/js/jquery-1.12.4.min.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/news/js/main.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/news/js/index.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/news/images/logo.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/news/images/person01.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/news/images/not_found.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:20] "GET /static/news/images/pic_code.png HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:21] "GET /news_list?page=1&cid=1&per_page=10 HTTP/1.1" 200 -
+ERROR views.py:54 'time.struct_time' object has no attribute 'tm_day'
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:22] "GET /admin/user_count HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:22] "GET /static/admin/js/echarts.min.js HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:32] "GET /static/admin/html/user_list.html HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:32] "GET /static/admin/css/jquery.pagination.css HTTP/1.1" 200 -
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:32] "GET /static/admin/js/jquery.pagination.min.js HTTP/1.1" 200 -
+ERROR views.py:54 'time.struct_time' object has no attribute 'tm_day'
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:53:37] "GET /admin/user_count HTTP/1.1" 200 -
+ERROR views.py:54 'time.struct_time' object has no attribute 'tm_day'
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:54:25] "GET /admin/user_count HTTP/1.1" 200 -
+ERROR views.py:54 'time.struct_time' object has no attribute 'tm_day'
+INFO _internal.py:88 127.0.0.1 - - [14/Oct/2018 10:54:46] "GET /admin/user_count HTTP/1.1" 200 -

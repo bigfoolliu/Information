@@ -7,17 +7,94 @@
 """
 info/modules/admin/views.py
 """
-from flask import request, render_template, session, redirect, url_for, current_app, g
+import datetime
+import time
+from flask import request, render_template, session, redirect, url_for, current_app, g, jsonify
 
 from info import db
 from info.models import User
 from info.modules.admin import admin_bp
 
-
-# 127.0.0.1:5000/admin/login
 from info.utils.common import user_login_data
 
 
+from info.utils.response_code import RET
+
+
+# 127.0.0.1:5000/admin/user_count
+@admin_bp.route('/user_count')
+def user_count():
+	"""
+	用户统计后端接口
+	:return:
+	"""
+	total_count = 0   # 查询总人数
+	try:
+		total_count = User.query.filter(User.is_admin == False).count()
+	except Exception as e:
+		current_app.logger.error(e)
+
+	# 月新增用户数：获取到本月第1天0点0分0秒的时间对象，然后查询最后一次登录比其大的所有数据
+	mon_count = 0
+	try:
+		now = time.localtime()
+		mon_begin = '%d-%02d-01' % (now.tm_year, now.tm_mon)  # 当前月份的第一天
+		mon_begin_date = datetime.datetime.strptime(mon_begin, '%Y-%m-%d')  # 将时间字符串转换为时间格式
+		mon_count = User.query.filter(User.is_admin == False, User.create_time >= mon_begin_date).count()
+	except Exception as e:
+		current_app.logger.error(e)
+
+	# 查询日新增数: 获取到当日0点0分0秒时间对象，然后查询最后一次登录比其大的所有数据
+	day_count = 0
+	try:
+		day_begin = '%d-%02d-%02d' % (now.tm_year, now.tm_mon, now.tm_day)
+		day_begin_date = datetime.datetime.strptime(day_begin, '%Y-%m-%d')  # 将时间字符串转换为时间格式
+		day_count = User.query.filter(User.is_admin == False, User.create_time >= day_begin_date).count()
+	except Exception as e:
+		current_app.logger.error(e)
+
+	# 图表查询：遍历查询数据每一天的数据(当前天数，减去某些天)
+	now_date = datetime.datetime.strptime(datetime.datetime.now().strftime('%Y-%m-%d'), '%Y-%m-%d')
+	active_date = []
+	active_count = []
+
+	# 依次添加数据
+	for i in range(0, 31):
+		# 一天的开始时间
+		begin_date = now_date - datetime.timedelta(days=i)
+		# 一天的结束时间
+		end_date = begin_date + datetime.timedelta(days=i)
+		active_date.append(begin_date.strftime('%Y-%m-%d'))
+		count = 0
+		try:
+			count = User.query.filter(
+				User.is_admin == False,
+				User.last_login >= begin_date,
+				User.last_login <= end_date
+			).count()
+		except Exception as e:
+			current_app.logger.error(e)
+		# 添加每一天的活跃人数
+		active_count.append(count)
+
+	# 数据反转
+	active_date.reverse()
+	active_count.reverse()
+
+	# 组织响应数据
+	data = {
+		'total_count': total_count,
+		'mon_count': mon_count,
+		'day_count': day_count,
+		'active_date': active_date,
+		'active_count': active_count
+	}
+
+	# 返回值
+	return render_template('admin/user_count.html', data=data)
+
+
+# 127.0.0.1:5000/admin/login
 @admin_bp.route('/login', methods=['GET', 'POST'])
 def admin_login():
 	"""
