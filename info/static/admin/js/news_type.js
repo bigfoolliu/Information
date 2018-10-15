@@ -40,34 +40,52 @@ $(function(){
 
     $confirm.click(function(){
 
-        var params = {}
-        if(sHandler=='edit')
+        var params = {};
+        if(sHandler == 'edit')
         {
             var sVal = $input.val();
-            if(sVal=='')
+            if(sVal == '')
             {
                 $error.html('输入框不能为空').show();
                 return;
             }
             params = {
                 "id": sId,
-                "name": sVal,
+                "name": sVal
             };
         }
         else
         {
             var sVal = $input.val();
-            if(sVal=='')
+            if(sVal == '')
             {
                 $error.html('输入框不能为空').show();
                 return;
             }
             params = {
-                "name": sVal,
+                "name": sVal
             }
         }
 
         // TODO 发起修改分类请求
+        $.ajax({
+            url: '/admin/add_category',
+            method: 'POST',
+            headers: {
+                'X-CSRFTOken': getCookie('csrf_token')
+            },
+            data: JSON.stringify(params),
+            contentType: 'application/json',
+            success: function (resp) {
+                // 修改成功
+                if(resp.erron == '0'){
+                    // 刷新页面
+                    location.reload()
+                }else{
+                    $error.html(resp.errmsg).show()
+                }
+            }
+        })
 
     })
-})
+});

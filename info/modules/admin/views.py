@@ -21,6 +21,50 @@ from info.utils.pic_storage import pic_storage
 from info.utils.response_code import RET
 
 
+# 127.0.0.1:5000/admin/add_category
+@admin_bp.route('/add_category', methods=['POST'])
+def add_category():
+	"""
+	添加编辑新闻分类后端接口
+	:return:
+	"""
+	# 获取分类id以及分类名称
+	id = request.json.get('id')
+	name = request.json.get('name')
+
+	if not name:
+		return jsonify(erron=RET.PARAMERR, errmsg='参数不足')
+
+	if id:
+		# 根据分类id查询修改对象
+		try:
+			category = Category.query.get(id)
+		except Exception as e:
+			current_app.logger.error(e)
+			return jsonify(erron=RET.DBERR, errmsg='数据库查询分类数据异常')
+
+		if not category:
+			return jsonify(erron=RET.NODATA, errmsg='该分类不存在')
+		else:
+			# 修改分类名称
+			category.name = name
+	else:
+		# 不存在该分类则创建分类
+		category = Category()
+		category.name = name
+		db.session.add(category)
+
+	# 将结果提交到数据库
+	try:
+		db.session.commit()
+	except Exception as e:
+		current_app.logger.error(e)
+		db.session.rollback()
+		return jsonify(erron=RET.DBERR, errmsg='数据库存储新闻分类异常')
+
+	return jsonify(erron=RET.OK, errmsg='编辑成功')
+
+
 # 127.0.0.1:5000/admin/news_type
 @admin_bp.route('/news_type')
 def news_type():
