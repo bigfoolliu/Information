@@ -37,9 +37,7 @@
                         <td>{{ news.clicks }}</td>
                         <td>{{ news.create_time }}</td>
                         <td>
-{#                            <a href="{{ url_for('admin.news_edit_detail') }}?news_id={{ news.id }}" class="edit">编辑</a>#}
-                            {# TODO: 修改 #}
-                            <a href="news_edit_detail.html" class="edit">编辑</a>
+                            <a href="{{ url_for('admin.news_edit_detail') }}?news_id={{ news.id }}" class="edit">编辑</a>
                         </td>
                     </tr>
                 {% endfor %}

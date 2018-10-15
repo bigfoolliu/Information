@@ -12,13 +12,116 @@ import time
 from flask import request, render_template, session, redirect, url_for, current_app, g, jsonify, abort
 
 from info import db, constants
-from info.models import User, News
+from info.models import User, News, Category
 from info.modules.admin import admin_bp
 
 from info.utils.common import user_login_data
-
+from info.utils.pic_storage import pic_storage
 
 from info.utils.response_code import RET
+
+
+# 127.0.0.1:5000/admin/news_edit_detail?p=页码
+@admin_bp.route('/news_edit_detail', methods=['GET', 'POST'])
+def news_edit_detail():
+	"""
+	新闻版式编辑详情页后端接口
+	:return:
+	"""
+	if request.method == 'GET':
+		news_id = request.args.get('news_id')
+		if not news_id:
+			return jsonify(erron=RET.PARAMERR, errmsg='参数不足')
+		try:
+			news = News.query.get(news_id)
+		except Exception as e:
+			current_app.logger.error(e)
+			return jsonify(erron=RET.DBERR, errmsg='数据库查询新闻异常')
+
+		if not news:
+			abort(404)
+
+		news_dict = news.to_dict()
+		# 获取分类数据
+		try:
+			categories = Category.query.all()
+		except Exception as e:
+			current_app.logger.error(e)
+			return jsonify(erron=RET.DBERR, errmsg='数据库查询分类数据异常')
+
+		# 对象列表转字典列表,模型列表转字典列表
+		category_dict_list = []
+		for category in categories if categories else []:
+			category_dict = category.to_dict()
+			# 选中当前新闻的标志默认为False
+			category_dict['is_selected'] = False
+			# 当前新闻的分类id和遍历拿到的相等时,将标志赋值为真
+			if category.id == news.id:
+				category_dict['is_selected'] = True
+
+			category_dict_list.append(category_dict)
+
+		# 删除'最新'分类
+		category_dict_list.pop(0)
+
+		data = {
+			'categories': category_dict_list,
+			'news': news_dict
+		}
+
+		return render_template('admin/news_edit_detail.html', data=data)
+
+	# 当为post请求时发布新闻
+	title = request.form.get('title')
+	category_id = request.form.get('category_id')
+	digest = request.form.get('digest')
+	content = request.form.get('content')
+	index_image = request.files.get('index_image')  # 非必需
+
+	# 获取隐藏标签新闻id
+	news_id = request.form.get('news_id')
+	print(title, category_id, digest, content, news_id)
+	if not all([title, category_id, digest, content, news_id]):
+		return jsonify(erron=RET.PARAMERR, errmsg='参数不足')
+
+	# 当图片更改时,重新上传至七牛云
+	pic_name = None
+	if index_image:
+		try:
+			pic_data = index_image.read()
+		except Exception as e:
+			current_app.logger.error(e)
+			return jsonify(erron=RET.PARAMERR, errmsg='图片数据不能为空')
+
+		try:
+			pic_name = pic_storage(pic_data)
+		except Exception as e:
+			current_app.logger.error(e)
+			return jsonify(erron=RET.THIRDERR, errmsg='上传图片异常')
+
+	# 查询新闻对象,并将其属性赋值
+	try:
+		news = News.query.get(news_id)
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='数据库查询新闻对象异常')
+
+	news.title = title
+	news.category_id = category_id
+	news.digest = digest
+	news.content = content
+	if pic_name:
+		news.index_image_url = constants.QINIU_DOMIN_PREFIX + pic_name
+
+	# 将新闻对象重新保存回数据库
+	try:
+		db.session.commit()
+	except Exception as e:
+		current_app.logger.error(e)
+		db.session.rollback()
+		return jsonify(erron=RET.DBERR, errmsg='数据库存储新闻对象异常')
+
+	return jsonify(erron=RET.OK, errmsg='发布新闻成功')
 
 
 # 127.0.0.1:5000/admin/news_edit?p=页码
@@ -56,7 +159,7 @@ def news_edit():
 
 	# 对象转字典
 	news_dict_list = []
-	for news in news_list:
+	for news in news_list if news_list else []:
 		news_dict_list.append(news.to_review_dict())
 
 	data = {
