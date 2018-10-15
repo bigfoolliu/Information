@@ -21,6 +21,53 @@ from info.utils.common import user_login_data
 from info.utils.response_code import RET
 
 
+# 127.0.0.1:5000/admin/news_edit?p=页码
+@admin_bp.route('/news_edit')
+def news_edit():
+	"""
+	新闻版式编辑后台接口
+	:return:
+	"""
+	p = request.args.get('p', 1)
+	try:
+		p = int(p)
+	except Exception as e:
+		current_app.logger.error(e)
+		p = 1
+
+	news_list = []
+	current_page = 1
+	total_page = 1
+	keywords = request.args.get('keywords')
+	filters = []
+
+	if keywords:
+		filters.append(News.title.contains(keywords))
+
+	try:
+		paginate = News.query.filter(*filters).order_by(News.create_time.desc()).\
+			paginate(p, constants.ADMIN_NEWS_PAGE_MAX_COUNT, False)
+		news_list = paginate.items
+		current_page = paginate.page
+		total_page = paginate.pages
+	except Exception as e:
+		current_app.logger.error(e)
+		return jsonify(erron=RET.DBERR, errmsg='数据库查询新闻错误')
+
+	# 对象转字典
+	news_dict_list = []
+	for news in news_list:
+		news_dict_list.append(news.to_review_dict())
+
+	data = {
+		'news_list': news_dict_list,
+		'current_page': current_page,
+		'total_page': total_page
+	}
+
+	return render_template('admin/news_edit.html', data=data)
+
+
 # 127.0.0.1:5000/admin/news_review_detail?news_id=新闻id
 @admin_bp.route('/news_review_detail', methods=['GET', 'POST'])
 def news_review_detail():

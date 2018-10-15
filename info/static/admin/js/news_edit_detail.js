@@ -8,7 +8,7 @@ $(function(){
         e.preventDefault()
         // TODO 新闻编辑提交
     })
-})
+});
 
 // 点击取消，返回上一页
 function cancel() {
